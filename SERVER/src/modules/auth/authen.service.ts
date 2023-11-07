@@ -40,4 +40,8 @@ export class AuthenService {
   async loginService(body: LoginDto): Promise<IResponseAuth> {
     return this.authenRepository.login(body);
   }
+
+  async googleLogin(req, res) {
+    return { data: res.user };
+  }
 }

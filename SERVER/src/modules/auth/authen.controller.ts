@@ -8,9 +8,15 @@ import {
   Body,
   ClassSerializerInterceptor,
   UseInterceptors,
+  Get,
+  UseGuards,
+  Res,
+  Req,
 } from '@nestjs/common';
 import { LoginDto, RegisterDto } from './dto/authen.dto';
 import { IResponseAuth } from './interface/authen.response';
+import { AuthGuard } from '@nestjs/passport';
+import { User } from '../user/entities/user.entity';
 dotenv.config();
 const init = process.env.API_URL;
 
@@ -26,5 +32,22 @@ export class AuthenController {
   @Post('/login')
   async login(@Body() body: LoginDto): Promise<IResponseAuth> {
     return await this.authenService.loginService(body);
+  }
+  @Get('/google')
+  @UseGuards(AuthGuard('google'))
+  async googleLogin(@Res() res): Promise<User | unknown | any> {
+    // return await this.authenService.getGoogleLoginUrl(res);
+  }
+
+  @Get('/google/callback')
+  @UseGuards(AuthGuard('google'))
+  async googleRedirect(@Req() req, @Res() res): Promise<User | unknown | any> {
+    return await this.authenService.googleLogin(req, res);
+  }
+
+  @Get('/google/user-data')
+  @UseGuards(AuthGuard('jwt'))
+  googleSuccess(@Req() req, @Res() res) {
+    res.json('Success');
   }
 }

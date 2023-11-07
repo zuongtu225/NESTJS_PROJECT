@@ -5,6 +5,7 @@ const orderSlice = createSlice({
   name: "orders",
   initialState: {
     orders: [],
+    historyOrders: [],
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -14,6 +15,12 @@ const orderSlice = createSlice({
     builder.addCase(actions.getOrderApi.fulfilled, (state: any, action) => {
       state.orders = action.payload;
     });
+    builder.addCase(
+      actions.getHistoryOrders.fulfilled,
+      (state: any, action) => {
+        state.historyOrders = action.payload;
+      }
+    );
     builder.addCase(actions.getOrderApi.rejected, (state: any, action) => {
       state.orders = action.payload;
     });

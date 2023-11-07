@@ -37,6 +37,10 @@ export class PaymentController {
   async getAllPayment(): Promise<IPayment[]> {
     return await this.paymentService.getAllPaymentService();
   }
+  @Get('/:id')
+  async getDetailPayment(@Param('id') id: number): Promise<IPayment> {
+    return await this.paymentService.getDetailPaymentService(id);
+  }
   @Put('/:id')
   async updatePayment(
     @Param('id') id: number,

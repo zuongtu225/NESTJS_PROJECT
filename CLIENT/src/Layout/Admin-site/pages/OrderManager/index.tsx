@@ -11,16 +11,12 @@ const OrderManager = () => {
   const [statusOder, getStatusOrder] = useState<string>("Pending");
   const [code, setCodeOrder] = useState<number>();
   const orderApi = useSelector((state: any) => state?.orderReducer?.orders);
-  const date = new Date();
-  const expectedDeliveryDate = new Date(
-    date.getTime() + 3 * 24 * 60 * 60 * 1000
-  );
+
   const changeStatus = (e: any, code: number) => {
     getStatusOrder(e.target.value);
     setCodeOrder(code);
   };
   useEffect(() => {
-    dispatch(getHistoryOrders());
     dispatch(getOrderApi());
   }, []);
   const updateOrder = async (id: number) => {
@@ -130,35 +126,61 @@ const OrderManager = () => {
                     <td className="w-4 p-4">{index + 1}</td>
                     <td className="px-6 py-4 "> {item.paymentId?.title}</td>
                     <td className="px-6 py-4 "> {item.addressId?.address}</td>
-                    <td className="px-6 py-4">{date.toLocaleDateString()}</td>
                     <td className="px-6 py-4">
-                      {expectedDeliveryDate.toLocaleDateString()}
+                      {item.orderDate.split("-").reverse().join("-")}
+                    </td>
+                    <td className="px-6 py-4">
+                      {item.expectedDeliveryDate.split("-").reverse().join("-")}
                     </td>
 
                     <td className="px-6 py-4">
-                      <select
-                        onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
-                          changeStatus(e, item.codeOrder)
-                        }
-                        className="cursor-pointer"
-                      >
-                        <option value={item.status}>{item.status}</option>
-                        <option value="Processing">Processing</option>
-                        <option value="Cancel">Cancel</option>
-                        <option value="Shipping">Shipping</option>
-                        <option value="Completed">Completed</option>
-                      </select>
+                      {item.status === "Cancel" ? (
+                        <p>Đơn bị hủy</p>
+                      ) : item.status === "Completed" ? (
+                        <p>Đơn hàng đã giao</p>
+                      ) : (
+                        <select
+                          onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                            changeStatus(e, item.codeOrder)
+                          }
+                          className="cursor-pointer"
+                        >
+                          {item.status === "Cancel" ? (
+                            <p>Đơn bị hủy</p>
+                          ) : item.status === "Completed" ? (
+                            <p>Đơn hàng đã giao</p>
+                          ) : (
+                            <button
+                              onClick={() => updateOrder(item.id)}
+                              className="w-30 bg-green-500 text-red-100 px-5 py-2 font-semibol m-2"
+                            >
+                              Cập nhật
+                            </button>
+                          )}
+                          <option value={item.status}>{item.status}</option>
+                          <option value="Processing">Processing</option>
+                          <option value="Cancel">Cancel</option>
+                          <option value="Shipping">Shipping</option>
+                          <option value="Completed">Completed</option>
+                        </select>
+                      )}
                     </td>
                     <td className="px-6 py-4 w-[150px]">
                       {item?.total?.toLocaleString()} ₫
                     </td>
                     <td className="px-6 py- 4">
                       {item.status === "Cancel" ? (
-                        <p>Đơn bị hủy</p>
+                        <button className="w-30 bg-green-500 text-red-100 px-5 py-2 font-semibol m-2">
+                          Chi Tiết
+                        </button>
+                      ) : item.status === "Completed" ? (
+                        <button className="w-30 bg-green-500 text-red-100 px-5 py-2 font-semibol m-2">
+                          Chi Tiết
+                        </button>
                       ) : (
                         <button
                           onClick={() => updateOrder(item.id)}
-                          className="w-30 bg-green-500 text-red-100 px-5 py-2 font-semibol m-2"
+                          className="w-30 bg-green-500 text-red-100 px-4 py-2 font-semibol m-2"
                         >
                           Cập nhật
                         </button>

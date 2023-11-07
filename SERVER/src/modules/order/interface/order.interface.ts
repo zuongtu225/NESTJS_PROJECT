@@ -9,6 +9,8 @@ export class IOrder {
   total: number;
   paymentId: Payment;
   userId: number;
+  orderDate: Date;
+  expectedDeliveryDate: Date;
 }
 export class IidCommon {
   id: number;

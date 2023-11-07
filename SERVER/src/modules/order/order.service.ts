@@ -51,4 +51,15 @@ export class OrderService {
       message: 'Id Order không đúng',
     };
   }
+  async getHistoryOrderService(id: number): Promise<Order[] | IResponse> {
+    const response = await this.orderRepository.getDetailByUser(id);
+    if (response == null) {
+      return {
+        data: null,
+        success: false,
+        message: 'Id Order không đúng',
+      };
+    }
+    return response;
+  }
 }

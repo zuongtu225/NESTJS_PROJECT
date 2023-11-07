@@ -1,17 +1,12 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { IUser, ProductType } from "../../Interface";
+import { IUser } from "../../Interface";
 import BaseAxios from "../../Api/requsetToken";
 
-export const getApiProducts = createAsyncThunk<ProductType>(
-  "products",
-  async () => {
-    const response = await BaseAxios.get(
-      "http://localhost:9000/api/v1/products"
-    );
-    return response.data;
-  }
-);
+export const getApiProducts = createAsyncThunk<any>("products", async () => {
+  const response = await BaseAxios.get("http://localhost:9000/api/v1/products");
+  return response.data;
+});
 export const getApiCategories = createAsyncThunk<any>(
   "categories",
   async () => {
@@ -21,10 +16,28 @@ export const getApiCategories = createAsyncThunk<any>(
     return response.data;
   }
 );
+export const getDetailCategory = createAsyncThunk<any, number>(
+  "categoryDetail",
+  async (id: number) => {
+    const response = await BaseAxios.get(
+      `http://localhost:9000/api/v1/categories/${id}`
+    );
+    return response.data;
+  }
+);
 export const getApiBrands = createAsyncThunk<any>("brands", async () => {
   const response = await BaseAxios.get("http://localhost:9000/api/v1/brands");
   return response.data;
 });
+export const getDetailBrand = createAsyncThunk<any, number>(
+  "brandDetail",
+  async (id: number) => {
+    const response = await axios.get(
+      `http://localhost:9000/api/v1/brands/${id}`
+    );
+    return response.data;
+  }
+);
 export const getApiProductSizes = createAsyncThunk<any>(
   "productSizes",
   async () => {
@@ -77,21 +90,28 @@ export const getDetailUser = createAsyncThunk("getDetailUser", async () => {
   const response = await BaseAxios.get(`http://localhost:9000/api/v1/users/me`);
   return response.data;
 });
-
 export const getOrderApi = createAsyncThunk<any>("getOrderApi", async () => {
   const response = await BaseAxios.get("http://localhost:9000/api/v1/orders");
   return response.data;
 });
-export const getPayments = createAsyncThunk<any>("getPayments", async () => {
-  const response = await BaseAxios.get("http://localhost:9000/api/v1/payments");
-  return response.data;
-});
-
 export const getHistoryOrders = createAsyncThunk<any>(
   "getHistoryOrders",
   async () => {
     const response = await BaseAxios.get(
-      "http://localhost:9000/api/v1/historyOrders"
+      "http://localhost:9000/api/v1/orders/history"
+    );
+    return response.data;
+  }
+);
+export const getPayments = createAsyncThunk<any>("getPayments", async () => {
+  const response = await BaseAxios.get("http://localhost:9000/api/v1/payments");
+  return response.data;
+});
+export const getDetailPayment = createAsyncThunk<any, any>(
+  "getDetailPayment",
+  async (id: number) => {
+    const response = await BaseAxios.get(
+      `http://localhost:9000/api/v1/payments/${id}`
     );
     return response.data;
   }

@@ -12,11 +12,10 @@ import { useNavigate } from "react-router-dom";
 import { IoMdCash } from "react-icons/io";
 import { FiPhoneCall } from "react-icons/fi";
 import { BiUser } from "react-icons/bi";
-import { IOder, IProduct, IVisa } from "../../../../Interface";
+import { IProduct } from "../../../../Interface";
 import { createOrder } from "../../../../Api/order";
 import { ToastContainer, toast } from "react-toastify";
 import { deleteCart, updateProduct, updateUser } from "../../../../Api";
-import { updateBanks } from "../../../../Api/banks";
 import { createOrderItem } from "../../../../Api/orderItem";
 import { createAddress } from "../../../../Api/address";
 const Checkout = () => {
@@ -56,9 +55,6 @@ const Checkout = () => {
   useEffect(() => {
     setTotal(calculateTotalPrice());
   }, [carts]);
-
-  const banks: any = useSelector((state: any) => state?.bankReducer?.banks);
-
   useEffect(() => {
     setTotal(calculateTotalPrice());
   }, []);
@@ -130,9 +126,17 @@ const Checkout = () => {
     const resAddress: any = await createAddress(infoAddress);
     const addressId = resAddress?.data?.data.id;
     const code = Number("2" + (Math.random() * 100000000).toFixed(0));
+    const date = new Date();
+    const deliveryDate = new Date(date.getTime() + 3 * 24 * 60 * 60 * 1000);
+    const expectedDelivery = deliveryDate
+      .toISOString() // change => định dạng ISO 8601.
+      .slice(0, 19)
+      .replace("T", " ");
     const newOrder = {
       codeOrder: code,
       paymentId: 2,
+      orderDate: date.toISOString().slice(0, 19).replace("T", " "),
+      expectedDeliveryDate: expectedDelivery,
       addressId: addressId,
       total,
       status: "Pending",
@@ -244,13 +248,16 @@ const Checkout = () => {
                       <span className="font-semibold">
                         {item.productSizeId?.productId?.title}
                       </span>
+                      <span className="">
+                        Dung tích: {item.productSizeId?.sizeId?.size.slice(13)}
+                      </span>
                       <div className="flex items-center gap-3">
                         <span className="text-black-500">Số lượng:</span>
                         <span className="text-black">{item.quantity}</span>
                       </div>
                       <p className="text-lg text-red-600  ">
                         Giá:
-                        {item.productSizeId?.productId?.price?.toLocaleString()}{" "}
+                        {item.productSizeId?.productId?.price?.toLocaleString()}
                         đ
                       </p>
                     </div>
@@ -422,7 +429,7 @@ const Checkout = () => {
                     Tổng tiền
                   </p>
                   <p className="font-semibold text-red-500 ">
-                    {userDetail?.sum?.toLocaleString()} ₫
+                    {total.toLocaleString()} ₫
                   </p>
                 </div>
                 <div className="flex items-center justify-between py-2">
@@ -435,7 +442,7 @@ const Checkout = () => {
               <div className="mt-6 flex items-center justify-between">
                 <p className="text-sm font-medium text-gray-900">Tổng tiền</p>
                 <p className="text-2xl font-semibold  text-red-500">
-                  {total.toLocaleString()} ₫
+                  {(total - 20000).toLocaleString()} ₫
                 </p>
               </div>
             </div>

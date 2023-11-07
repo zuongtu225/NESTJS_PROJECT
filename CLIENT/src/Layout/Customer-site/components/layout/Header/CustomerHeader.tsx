@@ -24,6 +24,7 @@ const CustomerHeader = () => {
     (state: any) => state?.userReducer?.userDetail
   );
   const carts: any = useSelector((state: any) => state?.cartReducer?.carts);
+
   const [isHidden, setIsHidden] = useState<boolean>(false);
   const [dataSearch, setDataSearch] = useState<IProduct[]>();
   const dataProduct = useSelector(

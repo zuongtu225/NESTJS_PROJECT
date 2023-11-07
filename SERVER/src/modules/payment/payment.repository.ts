@@ -15,6 +15,9 @@ export class PaymentRepository {
   async findAll(): Promise<Payment[]> {
     return await this.paymentRepository.find();
   }
+  async findDetail(id: number): Promise<Payment> {
+    return await this.paymentRepository.findOneBy({ id });
+  }
   async updatePayment(id: number, body: IPayment): Promise<UpdateResult> {
     return await this.paymentRepository.update(id, body);
   }

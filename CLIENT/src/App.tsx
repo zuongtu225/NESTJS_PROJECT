@@ -19,8 +19,9 @@ import VoucherManager from "./Layout/Admin-site/pages/Voucher";
 import BlogManager from "./Layout/Admin-site/pages/Blogs";
 import PaymentManager from "./Layout/Admin-site/pages/Payments";
 import MaleProducts from "./Layout/Customer-site/pages/products/MaleProducts";
-import Checkout from "./Layout/Customer-site/pages/Checkout";
+import Checkout from "./Layout/Customer-site/pages/checkout";
 import Profile from "./Layout/Customer-site/pages/profile";
+import HistoryOrders from "./Layout/Customer-site/pages/history_order";
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
       <Route path="/" element={<CustomerExtend />}>
         <Route index element={<Home />}></Route>
         <Route path="cart" element={<CustomerCart />}></Route>
+        <Route path="history" element={<HistoryOrders />}></Route>
         <Route path="checkout" element={<Checkout />}></Route>
         <Route path="male" element={<MaleProducts />}></Route>
         <Route path="female" element={<FemaleProducts />}></Route>

@@ -7,7 +7,6 @@ import { useDispatch, useSelector } from "react-redux";
 
 const ButtonEditProduct = (props: any) => {
   const dispatch = useDispatch<AppDispatch>();
-
   const [open, setOpen] = useState(false);
   const handleClose = (open: boolean) => {
     setOpen(open);

@@ -2,7 +2,6 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { OrderItemRepository } from './orderItem.repository';
 import { IOrderItem } from './interface/orderItem.interface';
 import { OrderItem } from './entities/orderItem.entity';
-import { IResponse } from 'src/shared/interfaces/response.interface';
 
 @Injectable()
 export class OrderItemService {

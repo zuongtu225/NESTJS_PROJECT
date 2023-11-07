@@ -6,6 +6,7 @@ const paymentSlice = createSlice({
   name: "payments",
   initialState: {
     payments: [],
+    paymentDetail: {},
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -15,6 +16,12 @@ const paymentSlice = createSlice({
     builder.addCase(actions.getPayments.fulfilled, (state: any, action) => {
       state.payments = action.payload;
     });
+    builder.addCase(
+      actions.getDetailPayment.fulfilled,
+      (state: any, action) => {
+        state.paymentDetail = action.payload;
+      }
+    );
     builder.addCase(actions.getPayments.rejected, (state: any, action) => {
       state.payments = action.payload;
     });

@@ -31,6 +31,11 @@ export class Order {
   @Column()
   userId: number;
 
+  @Column({ type: 'date' })
+  orderDate: Date;
+  @Column({ type: 'date' })
+  expectedDeliveryDate: Date;
+
   @Exclude()
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createAt: Date;

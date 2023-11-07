@@ -11,7 +11,7 @@ const Login = () => {
   const [email, setEmail] = useState<any>("");
   const [password, setPassword] = useState<any>("");
   const [error, setError] = useState<any>();
-  const [success, setSuccess] = useState<any>("");
+  const [isBlock, setIsBlock] = useState<boolean>(false);
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   useEffect(() => {
@@ -30,11 +30,12 @@ const Login = () => {
     const checkError = validate(dataUser);
     if (checkError.isError === false) {
       const response = await loginAPI(dataUser);
-      console.log(response, "<<55 66 ");
-
       if (response.data.success === false) {
         newError.isError = true;
         newError.emailMSG = "Email hoặc mật khẩu không đúng";
+      }
+      if (response.data.data.status === false) {
+        setIsBlock(true);
       }
       setError(newError);
       if (response.data.success === true) {
@@ -78,7 +79,9 @@ const Login = () => {
     setError(newError);
     return newError;
   };
-
+  const handleLoginGoogle = () => {
+    window.location.href = "http://localhost:9000/api/v1/google/callback";
+  };
   return (
     <>
       <div className="w-[40%] max-w-full px-3 mx-auto mt-0 mb-10 md:flex-0 shrink-0">
@@ -94,7 +97,12 @@ const Login = () => {
               <div className="mb-4">
                 {error?.isError === true && (
                   <p className="text-green-700 w-[70%] m-auto mb-2">
-                    {error.emailMSG}{" "}
+                    {error.emailMSG}
+                  </p>
+                )}
+                {isBlock === true && (
+                  <p className="text-green-700 w-[70%] m-auto mb-2">
+                    Tài khoản đã bị khóa
                   </p>
                 )}
                 <input
@@ -132,9 +140,6 @@ const Login = () => {
                 </button>
               </div>
               <div className="flex justify-between w-[70%] m-auto  mt-5 ">
-                {error?.isError === false && (
-                  <p className="text-green-700">{success} </p>
-                )}
                 <p className=" leading-normal text-sm">
                   Bạn đã có tài khoản?
                   <NavLink to={"/auth/register"} className={"ml-2"}>
@@ -152,7 +157,10 @@ const Login = () => {
               </p>
             </div>
             <div className="w-2/12   m-auto max-w-full px-1 mr-auto flex-0">
-              <a className="inline-block w-full px-6 py-3 mb-4 font-bold text-center text-gray-200 uppercase align-middle transition-all bg-transparent border border-gray-200 border-solid rounded-lg shadow-none cursor-pointer hover:scale-102 leading-pro text-xs ease-soft-in tracking-tight-soft bg-150 bg-x-25 hover:bg-transparent hover:opacity-75">
+              <a
+                onClick={handleLoginGoogle}
+                className="inline-block w-full px-6 py-3 mb-4 font-bold text-center text-gray-200 uppercase align-middle transition-all bg-transparent border border-gray-200 border-solid rounded-lg shadow-none cursor-pointer hover:scale-102 leading-pro text-xs ease-soft-in tracking-tight-soft bg-150 bg-x-25 hover:bg-transparent hover:opacity-75"
+              >
                 <svg
                   xmlnsXlink="http://www.w3.org/1999/xlink"
                   xmlns="http://www.w3.org/2000/svg"

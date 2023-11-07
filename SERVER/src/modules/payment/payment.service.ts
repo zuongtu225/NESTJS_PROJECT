@@ -21,6 +21,9 @@ export class PaymentService {
   async getAllPaymentService(): Promise<Payment[]> {
     return await this.paymentRepository.findAll();
   }
+  async getDetailPaymentService(id: number): Promise<Payment> {
+    return await this.paymentRepository.findDetail(id);
+  }
   async updatePaymentService(id: number, body: IPayment): Promise<IResponse> {
     const response = await this.paymentRepository.updatePayment(id, body);
     if (response.affected == 1) {

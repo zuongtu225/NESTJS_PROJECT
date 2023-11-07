@@ -5,7 +5,6 @@ import brandSlice from "./Slices/brandSlice";
 import { useDispatch } from "react-redux";
 import bankSlice from "./Slices/bankSlice";
 import orderSlice from "./Slices/orderSlice";
-import historyOrderSlice from "./Slices/historyOrders";
 import categorySlice from "./Slices/categorySlice";
 import sizesSlice from "./Slices/sizesSlice";
 import productSizeSlice from "./Slices/productSizeSlice";
@@ -26,7 +25,6 @@ const store = configureStore({
     bankReducer: bankSlice,
     paymentReducer: paymentSlice,
     orderReducer: orderSlice,
-    historyOrdersReducer: historyOrderSlice,
   },
 });
 

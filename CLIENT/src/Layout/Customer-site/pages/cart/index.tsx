@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { VscHome } from "react-icons/vsc";
 import { useDispatch, useSelector } from "react-redux";
@@ -11,12 +11,7 @@ import { ToastContainer, toast } from "react-toastify";
 const CustomerCart = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-  const userDetail: any = useSelector(
-    (state: any) => state?.userReducer?.userDetail
-  );
-  const [quantity, setQuantity] = useState<number>(0);
   const carts: any = useSelector((state: any) => state?.cartReducer?.carts);
-
   const minus = async (id: number) => {
     const cartItem = carts?.find((item: any) => item.id === id);
     if (cartItem.quantity > 1) {
@@ -44,13 +39,15 @@ const CustomerCart = () => {
       toast.error(" Id sản phẩm không đúng");
     }
   };
-
   const checkout = () => {
     if (carts.length > 0) {
       navigate("/checkout");
     } else {
       toast.error("Không có sản phẩm để đặt hàng");
     }
+  };
+  const goToHistory = () => {
+    navigate("/history");
   };
   useEffect(() => {
     dispatch(getDetailUser());
@@ -64,7 +61,9 @@ const CustomerCart = () => {
         <NavLink className="flex items-center gap-1" to={"/"}>
           Trang chủ <VscHome />
         </NavLink>
-        <p id="historyClick">Lịch sử đơn hàng</p>
+        <p id="historyClick" onClick={goToHistory}>
+          Lịch sử đơn hàng
+        </p>
       </div>
       <div className="cart-order container">
         <div className="cart-heading">
@@ -74,9 +73,7 @@ const CustomerCart = () => {
           <p className="cart-item-count">0 sản phẩm</p>
           <NavLink to={"/"}>Tiếp tục mua hàng</NavLink>
         </div>
-        {/* <!-- orders --> */}
         <div className="cart-pay-wrapper flex">
-          {/* <!-- orders --> */}
           <div className="cart-oder-left">
             {carts?.map((item: any, index: number) => {
               const size = item.productSizeId?.sizeId?.size.slice(14);
@@ -99,11 +96,9 @@ const CustomerCart = () => {
                       <p className="name">{size}</p>
                     </div>
                   </div>
-
                   <div className="price-order hide-mobile">
                     {item.productSizeId?.productId?.price?.toLocaleString()} ₫
                   </div>
-
                   <div className="quantity-parent">
                     <button>
                       <AiOutlineMinus
@@ -155,7 +150,6 @@ const CustomerCart = () => {
               </div>
             </div>
           </div>
-          {/* <!--  thanh toán --> */}
         </div>
       </div>
     </main>

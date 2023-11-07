@@ -6,6 +6,8 @@ import { AuthenService } from './authen.service';
 import { AuthenRepository } from './authen.repository';
 import { JwtModule } from '@nestjs/jwt';
 import * as dotenv from 'dotenv';
+import { PassportModule } from '@nestjs/passport';
+import { GoogleStrategy } from './google.strategy';
 dotenv.config();
 @Module({
   imports: [
@@ -15,9 +17,10 @@ dotenv.config();
       secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: '1d' },
     }),
+    PassportModule.register({ defaultStrategy: 'google' }),
   ],
   controllers: [AuthenController],
-  providers: [AuthenService, AuthenRepository],
-  exports: [AuthenService],
+  providers: [AuthenService, AuthenRepository, GoogleStrategy],
+  exports: [AuthenService, PassportModule],
 })
 export class AuthenModule {}

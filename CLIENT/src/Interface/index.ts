@@ -138,7 +138,8 @@ export interface IOder {
   address: string;
   phone: string;
   cartOrders: IProduct[];
-  date: Date;
+  orderDate: Date;
+  expectedDeliveryDate: Date;
   codeOrder: number;
   status: string;
 }

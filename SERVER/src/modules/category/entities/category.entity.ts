@@ -14,6 +14,9 @@ export class Category {
   @Exclude()
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   updateAt: Date;
-  @OneToMany(() => Product, (product) => product.category)
+  @OneToMany(() => Product, (product) => product.category, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
   products: Product[];
 }
