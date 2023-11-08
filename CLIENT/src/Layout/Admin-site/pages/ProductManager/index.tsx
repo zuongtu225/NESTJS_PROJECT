@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import AdminHeader from "../../components/layout/Header";
 import { useDispatch, useSelector } from "react-redux";
 import { getApiProducts } from "../../../../store/action";
@@ -6,13 +6,18 @@ import { AppDispatch } from "../../../../store";
 import { updateStatusProduct } from "../../../../Api";
 import { ToastContainer, toast } from "react-toastify";
 import ButtonEditProduct from "../../components/Button/ButtonEditProduct";
+import Pagination from "../../components/pagination";
+import { IProduct } from "../../../../Interface";
 
 const ProductManager = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const data = useSelector((state: any) => state?.productReducer?.products);
-  useEffect(() => {
-    dispatch(getApiProducts(null));
-  }, []);
+  const [data, setData] = useState<IProduct[]>();
+  const product = useSelector((state: any) => state?.productReducer?.products);
+
+  const handlePage = (pagination: any) => {
+    setData(pagination);
+  };
+
   const handleStatus = async (status: any, id: number) => {
     const newStatus = +status === 1 ? true : false;
     const response: any = await updateStatusProduct(newStatus, id);
@@ -25,7 +30,9 @@ const ProductManager = () => {
       toast.error(response.data.message);
     }
   };
-
+  useEffect(() => {
+    dispatch(getApiProducts(null));
+  }, []);
   return (
     <div>
       <AdminHeader title="PRODUCTS" slug="PRODUCTS" />
@@ -77,7 +84,7 @@ const ProductManager = () => {
                       className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                     >
                       <img
-                        className="w-20 h-100 "
+                        className="w-20 h-20 object-cover "
                         src={item?.images[0]?.url}
                         alt=""
                       />
@@ -108,6 +115,7 @@ const ProductManager = () => {
               })}
             </tbody>
           </table>
+          <Pagination data={product} handlePage={handlePage} />
         </div>
       </div>
     </div>

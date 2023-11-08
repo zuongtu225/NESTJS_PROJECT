@@ -1,17 +1,28 @@
 import React, { useEffect, useState } from "react";
 import AdminHeader from "../../components/layout/Header";
-import { getHistoryOrders, getOrderApi } from "../../../../store/action";
+import {
+  getDetailOrder,
+  getHistoryOrderByUser,
+  getOrderApi,
+} from "../../../../store/action";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../../../store";
 import { ToastContainer, toast } from "react-toastify";
 import { updateOrderApi } from "../../../../Api/order";
-import { IOder } from "../../../../Interface";
+import { OrderDetailModal } from "./orderDetailForm";
 const OrderManager = () => {
   const dispatch = useDispatch<AppDispatch>();
   const [statusOder, getStatusOrder] = useState<string>("Pending");
   const [code, setCodeOrder] = useState<number>();
   const orderApi = useSelector((state: any) => state?.orderReducer?.orders);
-
+  const [open, setOpen] = useState<boolean>(false);
+  const handleClose = (open: boolean) => {
+    setOpen(open);
+  };
+  const handleDetail = async (userId: number) => {
+    await dispatch(getDetailOrder(userId));
+    setOpen(!open);
+  };
   const changeStatus = (e: any, code: number) => {
     getStatusOrder(e.target.value);
     setCodeOrder(code);
@@ -48,7 +59,7 @@ const OrderManager = () => {
         if (reCancel.data.success === true) {
           toast.success("Đơn hàng đã bị hủy ");
           dispatch(getOrderApi());
-          dispatch(getHistoryOrders());
+          dispatch(getHistoryOrderByUser(null));
         } else {
           toast.error("Thất bại do lỗi yêu cầu đến API");
         }
@@ -77,7 +88,7 @@ const OrderManager = () => {
         if (reCompleted.data.success === true) {
           toast.success("Đơn hàng đã giao thành công ");
           dispatch(getOrderApi());
-          dispatch(getHistoryOrders());
+          dispatch(getHistoryOrderByUser(null));
         } else {
           toast.error("Thất bại do lỗi yêu cầu đến API");
         }
@@ -122,6 +133,7 @@ const OrderManager = () => {
               </tr>
             </thead>
             <tbody>
+              <OrderDetailModal open={open} handleClose={handleClose} />
               {orderApi?.map((item: any, index: number) => {
                 return (
                   <tr key={item.id} className="p-10">
@@ -134,7 +146,6 @@ const OrderManager = () => {
                     <td className="px-6 py-4">
                       {item.expectedDeliveryDate.split("-").reverse().join("-")}
                     </td>
-
                     <td className="px-6 py-4">
                       {item.status === "Cancel" ? (
                         <p>Đơn bị hủy</p>
@@ -147,18 +158,6 @@ const OrderManager = () => {
                           }
                           className="cursor-pointer"
                         >
-                          {item.status === "Cancel" ? (
-                            <p>Đơn bị hủy</p>
-                          ) : item.status === "Completed" ? (
-                            <p>Đơn hàng đã giao</p>
-                          ) : (
-                            <button
-                              onClick={() => updateOrder(item.id)}
-                              className="w-30 bg-green-500 text-red-100 px-5 py-2 font-semibol m-2"
-                            >
-                              Cập nhật
-                            </button>
-                          )}
                           <option value={item.status}>{item.status}</option>
                           <option value="Processing">Processing</option>
                           <option value="Cancel">Cancel</option>
@@ -172,17 +171,23 @@ const OrderManager = () => {
                     </td>
                     <td className="px-6 py- 4">
                       {item.status === "Cancel" ? (
-                        <button className="w-30 bg-green-500 text-red-100 px-5 py-2 font-semibol m-2">
+                        <button
+                          onClick={() => handleDetail(item.id)}
+                          className="w-30 bg-light-blue-800 text-red-100 px-5 py-2 font-semibol m-2"
+                        >
                           Chi Tiết
                         </button>
                       ) : item.status === "Completed" ? (
-                        <button className="w-30 bg-green-500 text-red-100 px-5 py-2 font-semibol m-2">
+                        <button
+                          onClick={() => handleDetail(item.id)}
+                          className="w-30 bg-light-blue-800 text-red-100 px-5 py-2 font-semibol m-2"
+                        >
                           Chi Tiết
                         </button>
                       ) : (
                         <button
                           onClick={() => updateOrder(item.id)}
-                          className="w-30 bg-green-500 text-red-100 px-4 py-2 font-semibol m-2"
+                          className="w-[100px] bg-green-500 text-red-100 px-4 py-2 font-semibol m-2"
                         >
                           Cập nhật
                         </button>

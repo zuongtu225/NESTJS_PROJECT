@@ -6,7 +6,7 @@ const orderSlice = createSlice({
   initialState: {
     orders: [],
     orderDetail: {},
-    historyOrders: [],
+    historyOrderByUser: [],
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -17,9 +17,9 @@ const orderSlice = createSlice({
       state.orders = action.payload;
     });
     builder.addCase(
-      actions.getHistoryOrders.fulfilled,
+      actions.getHistoryOrderByUser.fulfilled,
       (state: any, action) => {
-        state.historyOrders = action.payload;
+        state.historyOrderByUser = action.payload;
       }
     );
     builder.addCase(actions.getDetailOrder.fulfilled, (state: any, action) => {

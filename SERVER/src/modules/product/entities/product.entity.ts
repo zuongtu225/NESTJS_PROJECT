@@ -6,8 +6,6 @@ import { ProductSize } from 'src/modules/productSize/entities/productSize.entity
 import {
   Column,
   Entity,
-  JoinTable,
-  ManyToMany,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,

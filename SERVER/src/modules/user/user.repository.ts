@@ -14,7 +14,10 @@ export class UserRepository {
   }
   async findAll(data: ISearch): Promise<IUser[]> {
     return await this.userRepository.find({
-      where: data && { firstName: ILike(`%${data}%`) },
+      where: data.data && [
+        { firstName: ILike(`%${data.data}%`) },
+        { lastName: ILike(`%${data.data}%`) },
+      ],
     });
   }
 

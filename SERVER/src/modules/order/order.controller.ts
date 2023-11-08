@@ -32,8 +32,8 @@ export class OrderController {
   ): Promise<IResponse> {
     return await this.orderService.createOrderService(user.id, body);
   }
-  @Get('/history')
-  async getHistoryOrder(@CurrentUser() user): Promise<any> {
+  @Get('/historyByUser')
+  async getHistoryOrderByUser(@CurrentUser() user): Promise<any> {
     return await this.orderService.getHistoryOrderService(user.id);
   }
   @Get()
@@ -44,7 +44,6 @@ export class OrderController {
   async getDetailOrder(@Param('id') id: number): Promise<Order | IResponse> {
     return await this.orderService.getDetailOrderService(+id);
   }
-
   @Put('/:id')
   async updateOrder(@Param('id') id, @Body() body): Promise<IResponse> {
     return await this.orderService.updateOrderService(id, body);

@@ -60,7 +60,7 @@ export function EditModal(props: any) {
           toast.success(responseBrand.data.message);
           props.handleClose(false);
           setTimeout(() => {
-            dispatch(getApiBrands());
+            dispatch(getApiBrands(null));
           }, 2000);
         } else {
           props.handleClose(false);

@@ -4,6 +4,7 @@ import { DeleteResult, ILike, Repository, UpdateResult } from 'typeorm';
 import { IProduct } from './interface/Product.interface';
 import { Product } from './entities/product.entity';
 import { ProductDto } from './dto/product.dto';
+import { ISearch } from '../user/interface/user.interface';
 @Injectable()
 export class ProductRepository {
   constructor(
@@ -13,9 +14,9 @@ export class ProductRepository {
   async create(body: ProductDto): Promise<IProduct> {
     return await this.productRepository.save(body);
   }
-  async findAll(title: string): Promise<ProductDto[]> {
+  async findAll(data: ISearch): Promise<ProductDto[]> {
     return await this.productRepository.find({
-      where: title && { title: ILike(`%${title}%`) },
+      where: data.data && { title: ILike(`%${data.data}%`) },
     });
   }
   async findOne(id: number): Promise<IProduct> {

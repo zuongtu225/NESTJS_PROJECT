@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { IOrder, IidCommon } from './interface/order.interface';
 import { Order } from './entities/order.entity';
+import { ISearch } from '../user/interface/user.interface';
 @Injectable()
 export class OrderRepository {
   constructor(
@@ -34,7 +35,6 @@ export class OrderRepository {
       .leftJoinAndSelect('order.orderItems', 'OrderItem')
       .leftJoinAndSelect('OrderItem.productSizeId', 'productSizeId')
       .leftJoinAndSelect('productSizeId.productId', 'productId')
-      // .leftJoinAndSelect('productId.brandId', 'brandId')
       .leftJoinAndSelect('productSizeId.sizeId', 'sizeId')
       .leftJoinAndSelect('order.addressId', 'address')
       .where('order.userId = :userId', { userId: id })

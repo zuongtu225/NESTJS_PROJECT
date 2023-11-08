@@ -28,13 +28,13 @@ const BrandsManager = () => {
     const response = await deleteBrand(id);
     if (response) {
       toast.success("Xóa thành công");
-      dispatch(getApiBrands());
+      dispatch(getApiBrands(null));
     } else {
       toast.error("Phải xóa các sản phẩm đã tạo bởi Thương Hiệu này trước");
     }
   };
   useEffect(() => {
-    dispatch(getApiBrands());
+    dispatch(getApiBrands(null));
   }, []);
 
   return (

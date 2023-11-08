@@ -3,6 +3,7 @@ import { IResponse } from 'src/shared/interfaces/response.interface';
 import { ProductRepository } from './product.repository';
 import { ProductDto } from './dto/product.dto';
 import { IProduct } from './interface/Product.interface';
+import { ISearch } from '../user/interface/user.interface';
 @Injectable()
 export class ProductService {
   constructor(private readonly productRepository: ProductRepository) {}
@@ -17,8 +18,8 @@ export class ProductService {
     }
     throw new BadRequestException('Tạo Product thất bại');
   }
-  async getAllProductService(title: string): Promise<ProductDto[]> {
-    return await this.productRepository.findAll(title);
+  async getAllProductService(data: ISearch): Promise<ProductDto[]> {
+    return await this.productRepository.findAll(data);
   }
   async getDetailProduct(id: number): Promise<IProduct | IResponse> {
     const response = await this.productRepository.findOne(id);

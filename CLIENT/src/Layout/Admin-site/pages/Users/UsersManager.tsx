@@ -10,11 +10,9 @@ import { ToastContainer, toast } from "react-toastify";
 const UsersManager = () => {
   const dispatch = useDispatch<AppDispatch>();
   const users = useSelector((state: any) => state?.userReducer?.users);
-
   useEffect(() => {
     dispatch(getApiUsers(null));
   }, []);
-
   const handleStatus = async (status: any, id: number) => {
     const newStatus = +status === 1 ? true : false;
     const response = await updateStatusUser(newStatus, id);

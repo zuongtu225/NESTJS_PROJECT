@@ -19,6 +19,7 @@ import { IResponse } from 'src/shared/interfaces/response.interface';
 import { AuthenGuard } from 'src/shared/guards/authen.guard';
 import { AuthorGuard } from 'src/shared/guards/author.guard';
 import { ProductDto } from './dto/product.dto';
+import { ISearch } from '../user/interface/user.interface';
 
 dotenv.config();
 const init = process.env.API_URL;
@@ -35,8 +36,8 @@ export class ProductController {
     return await this.productService.createProductService(body);
   }
   @Get()
-  async getAllProducts(@Query() title: ITitle): Promise<any> {
-    return await this.productService.getAllProductService(title.title);
+  async getAllProducts(@Query() data: ISearch): Promise<any> {
+    return await this.productService.getAllProductService(data);
   }
   @Get('/:id')
   async getDetailProduct(

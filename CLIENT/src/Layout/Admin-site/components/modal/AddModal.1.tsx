@@ -93,7 +93,7 @@ export function AddModal(props: any): any {
           props.handleClose(false);
           toast.success(responseBrand?.data?.message);
           setTimeout(() => {
-            dispatch(getApiBrands());
+            dispatch(getApiBrands(null));
           }, 2000);
         } else {
           props.handleClose(false);

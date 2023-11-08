@@ -1,38 +1,26 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../../../store";
 import {
-  getCartByUser,
   getDetailOrder,
-  getDetailUser,
-  getHistoryOrders,
-  getOrderApi,
+  getHistoryOrderByUser,
 } from "../../../../store/action";
 import { ToastContainer, toast } from "react-toastify";
 import { BsFillCartCheckFill } from "react-icons/bs";
-import { Button } from "flowbite-react";
 import { updateOrderApi } from "../../../../Api/order";
 import { HistoryModal } from "./historyForm";
 const HistoryOrders = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const navigate = useNavigate();
   const [open, setOpen] = useState<boolean>(false);
   const handleClose = (open: boolean) => {
     setOpen(open);
   };
-  const userDetail: any = useSelector(
-    (state: any) => state?.userReducer?.userDetail
-  );
   const handleDetail = async (id: number) => {
     await dispatch(getDetailOrder(id));
     setOpen(!open);
   };
-
-  const [quantity, setQuantity] = useState<number>(0);
-  const carts: any = useSelector((state: any) => state?.cartReducer?.carts);
   const historyOrders = useSelector(
-    (state: any) => state?.orderReducer?.historyOrders
+    (state: any) => state?.orderReducer?.historyOrderByUser
   );
   const updateOrder = async (id: number) => {
     const orderNeedChange = historyOrders?.find((item: any) => item.id === id);
@@ -45,7 +33,7 @@ const HistoryOrders = () => {
     if (reCancel?.data?.success === true) {
       toast.success("Đơn hàng đã bị hủy ");
       setTimeout(() => {
-        dispatch(getHistoryOrders());
+        dispatch(getHistoryOrderByUser(null));
       }, 1500);
     } else {
       toast.error("Thất bại do lỗi yêu cầu đến API");
@@ -53,10 +41,7 @@ const HistoryOrders = () => {
   };
 
   useEffect(() => {
-    dispatch(getDetailUser());
-    dispatch(getCartByUser());
-    dispatch(getHistoryOrders());
-    dispatch(getOrderApi());
+    dispatch(getHistoryOrderByUser(null));
   }, []);
 
   return (

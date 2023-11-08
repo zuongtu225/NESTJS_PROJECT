@@ -28,7 +28,7 @@ const AdminHeader = (props: Iprops) => {
   return (
     <div>
       <AddModal title={props.title} open={open} handleClose={handleClose} />
-      <form className="flex items-center pb-10">
+      <form className="flex items-center pb-5">
         <div className="p-4 uppercase font-semibold text-xl">{props.title}</div>
         <label htmlFor="voice-search" className="sr-only">
           Search

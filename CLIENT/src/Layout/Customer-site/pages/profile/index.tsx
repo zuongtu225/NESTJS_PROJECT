@@ -12,22 +12,17 @@ import { ToastContainer } from "react-toastify";
 import { NavLink, useNavigate } from "react-router-dom";
 import { Dialog, DialogFooter, DialogHeader } from "@material-tailwind/react";
 import { Button } from "flowbite-react";
-
 const Profile = () => {
   const [open, setOpen] = useState(false);
-
   const ClickClose = () => {
     setOpen(false);
   };
-
   const openModal = () => {
     setOpen(true);
   };
-
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const auth: any = localStorage.getItem("auth") || "";
-
   const listBanks: any = useSelector((state: any) => state?.bankReducer?.banks);
   const [bank, setBank] = useState();
   const [code, setCode] = useState();
@@ -181,82 +176,8 @@ const Profile = () => {
       </div>
 
       {/* profile user end*/}
-      <hr className="text-light-blue-400 h-[3] w-[3]"></hr>
-      {/* add visa */}
-      <div className="mx-auto max-w-[1920px] px-4 md:px-8 2xl:px-16 mt-10">
-        <div className="md:w-full lg:w-3/5 2xl:w-4/6 flex h-full ltr:md:ml-7 rtl:md:mr-7 flex-col ltr:lg:pl-7 rtl:lg:pr-7">
-          <div className="flex pb-7 md:pb-9 mt-7 md:-mt-1.5">
-            <h4 className="text-2xl 2xl:text-3xl font-bold text-heading ">
-              THÊM THẺ VISA
-            </h4>
-          </div>
-          <form
-            // onSubmit={(e) => addVisa(e)}
-            className="w-full mx-auto flex flex-col justify-center "
-            noValidate
-          >
-            <img
-              className="w-[200px] object-cover"
-              src="https://blog.logomyway.com/wp-content/uploads/2022/02/visa-logo-2.jpg"
-              alt=""
-            />
-            <div className="flex flex-col space-y-5">
-              <div className="relative mt-5">
-                <select onChange={(e: any) => setBank(e.target.value)}>
-                  <option value="">Ngân hàng</option>
-                  <option value="Techcombank">Techcombank</option>
-                  <option value="Vietcombank">Vietcombank</option>
-                </select>
-              </div>
-              <div className="flex flex-col md:flex-row space-y-5 md:space-y-0 gap-4">
-                <div className="flex">
-                  <div className="relative w-7/12 flex-shrink-0 my-2">
-                    <input
-                      type="text"
-                      id="card-no"
-                      name="card-no"
-                      className="w-full  border border-gray-200 px-2 py-3 pl-[45px] text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
-                      placeholder="xxxx-xxxx-xxxx-xxxx"
-                      onChange={(e: any) => setCode(e.target.value)}
-                    />
-                    <div className="pointer-events-none absolute inset-y-0 left-0 inline-flex items-center px-3">
-                      <img
-                        className="w-6 h-6"
-                        src="https://static.vecteezy.com/system/resources/previews/022/100/276/original/visa-logo-transparent-free-png.png"
-                        alt=""
-                      />
-                    </div>
-                  </div>
-                  <input
-                    type="text"
-                    name="credit-expiry"
-                    className="w-full my-2  border border-gray-200 px-2 py-3 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
-                    placeholder="MM/YY"
-                    onChange={(e: any) => setExp(e.target.value)}
-                  />
-                  <input
-                    type="text"
-                    name="credit-cvc"
-                    className="w-1/6 my-2 flex-shrink-0  border border-gray-200 px-2 py-3 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
-                    placeholder="CVC"
-                    onChange={(e: any) => setCvc(e.target.value)}
-                  />
-                </div>
-              </div>
+      {/* <hr className="text-light-blue-400 h-[3] w-[3]"></hr> */}
 
-              <div className="relative">
-                <button
-                  data-variant="flat"
-                  className=" text-[13px] md:text-sm leading-4 inline-flex items-center cursor-pointer transition ease-in-out duration-300 font-semibold font-body text-center justify-center border-0 border-transparent placeholder-white focus-visible:outline-none focus:outline-none  bg-black text-white px-5 md:px-6 lg:px-8 py-4 md:py-3.5 lg:py-4 hover:text-white hover:bg-gray-600 hover:shadow-cart h-12 lg:h-14 mt-1 text-sm lg:text-base w-full sm:w-auto"
-                  type="submit"
-                >
-                  THÊM
-                </button>
-              </div>
-            </div>
-          </form>
-        </div>
-      </div>
       <ToastContainer />
     </>
   );

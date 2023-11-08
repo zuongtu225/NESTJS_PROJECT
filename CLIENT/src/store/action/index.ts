@@ -33,10 +33,18 @@ export const getDetailCategory = createAsyncThunk<any, number>(
     return response.data;
   }
 );
-export const getApiBrands = createAsyncThunk<any>("brands", async () => {
-  const response = await BaseAxios.get("http://localhost:9000/api/v1/brands");
-  return response.data;
-});
+export const getApiBrands = createAsyncThunk<any, any>(
+  "brands",
+  async (data: IParams) => {
+    const response = await BaseAxios.get(
+      "http://localhost:9000/api/v1/brands",
+      {
+        params: data,
+      }
+    );
+    return response.data;
+  }
+);
 export const getDetailBrand = createAsyncThunk<any, number>(
   "brandDetail",
   async (id: number) => {
@@ -116,11 +124,14 @@ export const getOrderApi = createAsyncThunk<any>("getOrderApi", async () => {
   const response = await BaseAxios.get("http://localhost:9000/api/v1/orders");
   return response.data;
 });
-export const getHistoryOrders = createAsyncThunk<any>(
-  "getHistoryOrders",
-  async () => {
+export const getHistoryOrderByUser = createAsyncThunk<any, any>(
+  "getHistoryOrderByUser",
+  async (userId: any) => {
     const response = await BaseAxios.get(
-      "http://localhost:9000/api/v1/orders/history"
+      "http://localhost:9000/api/v1/orders/historyByUser",
+      {
+        params: userId,
+      }
     );
     return response.data;
   }
