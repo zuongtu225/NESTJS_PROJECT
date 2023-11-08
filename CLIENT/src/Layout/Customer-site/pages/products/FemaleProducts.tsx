@@ -35,7 +35,7 @@ const FemaleProducts = () => {
   };
   useEffect(() => {
     dispatch(getApiBrands());
-    dispatch(getApiProducts());
+    dispatch(getApiProducts(null));
     setData(femalePerfum);
   }, []);
   useEffect(() => {

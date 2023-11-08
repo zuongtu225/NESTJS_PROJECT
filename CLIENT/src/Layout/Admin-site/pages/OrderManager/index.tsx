@@ -48,6 +48,7 @@ const OrderManager = () => {
         if (reCancel.data.success === true) {
           toast.success("Đơn hàng đã bị hủy ");
           dispatch(getOrderApi());
+          dispatch(getHistoryOrders());
         } else {
           toast.error("Thất bại do lỗi yêu cầu đến API");
         }
@@ -76,6 +77,7 @@ const OrderManager = () => {
         if (reCompleted.data.success === true) {
           toast.success("Đơn hàng đã giao thành công ");
           dispatch(getOrderApi());
+          dispatch(getHistoryOrders());
         } else {
           toast.error("Thất bại do lỗi yêu cầu đến API");
         }
@@ -86,7 +88,7 @@ const OrderManager = () => {
   };
   return (
     <div>
-      <AdminHeader title={"order"} />
+      <AdminHeader title={"order"} slug={"ORDERS"} />
       <ToastContainer />
       <div className="content orders">
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg">

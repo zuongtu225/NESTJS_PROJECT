@@ -6,3 +6,6 @@ export class IProduct {
   isBestSeller: boolean;
   description: string;
 }
+export class ITitle {
+  title: string;
+}

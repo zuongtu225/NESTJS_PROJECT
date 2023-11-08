@@ -6,7 +6,7 @@ import { getApiUsers } from "../../store/action";
 import { AppDispatch } from "../../store";
 import { ToastContainer, toast } from "react-toastify";
 import { registerAPI } from "../../Api/auth";
-import { IUser } from "../../Interface";
+
 const Register = () => {
   const data = useSelector((state: any) => state?.userReducer?.users);
   const dispatch = useDispatch<AppDispatch>();
@@ -17,7 +17,7 @@ const Register = () => {
   const [error, setError] = useState<any>();
   const navigate = useNavigate();
   useEffect(() => {
-    dispatch(getApiUsers());
+    dispatch(getApiUsers(null));
   }, []);
   const register = async (e: any) => {
     e.preventDefault();
@@ -30,7 +30,8 @@ const Register = () => {
       email: email,
       password: password,
       refreshToken: "",
-      avatar: "",
+      avatar:
+        "https://inkythuatso.com/uploads/thumbnails/800/2023/03/8-anh-dai-dien-trang-inkythuatso-03-15-26-54.jpg",
       firstName: "",
       lastName: "",
       role: data?.length === 0 ? 1 : 2,
@@ -42,7 +43,7 @@ const Register = () => {
         toast.success("Đăng Ký Thành Công");
         setTimeout(() => {
           setEmail("");
-          dispatch(getApiUsers());
+          dispatch(getApiUsers(null));
           navigate("/auth/login");
         }, 3000);
       } else {

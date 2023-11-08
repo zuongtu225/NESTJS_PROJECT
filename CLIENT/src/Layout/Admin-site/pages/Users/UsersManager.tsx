@@ -12,7 +12,7 @@ const UsersManager = () => {
   const users = useSelector((state: any) => state?.userReducer?.users);
 
   useEffect(() => {
-    dispatch(getApiUsers());
+    dispatch(getApiUsers(null));
   }, []);
 
   const handleStatus = async (status: any, id: number) => {
@@ -22,7 +22,7 @@ const UsersManager = () => {
     if (response.data.success === true) {
       toast.success(response.data.message);
       setTimeout(async () => {
-        await dispatch(getApiUsers());
+        await dispatch(getApiUsers(null));
         await dispatch(getDetailUser());
       }, 1000);
     } else {
@@ -31,37 +31,25 @@ const UsersManager = () => {
   };
   return (
     <div>
-      <AdminHeader title={"USERS"} />
+      <AdminHeader title={"USERS"} slug={"USERS"} />
       <ToastContainer />
       <div className="content users">
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
           <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
             <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
               <tr>
-                <th scope="col" className="p-4">
-                  <div className="flex items-center">
-                    <input
-                      id="checkbox-all-search"
-                      type="checkbox"
-                      className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                    />
-                    <label htmlFor="checkbox-all-search" className="sr-only">
-                      checkbox
-                    </label>
-                  </div>
-                </th>
                 <th scope="col" className="px-6 py-3">
                   ID
                 </th>
 
-                <th scope="col" className="px-6 py-3">
+                <th scope="col" className="px-20 py-3">
                   Avatar
                 </th>
-                <th scope="col" className="px-6 py-3">
-                  Email
+                <th scope="col" className="px-20 py-3">
+                  Tên người dùng
                 </th>
-                <th scope="col" className="px-6 py-3">
-                  Số điện thoại
+                <th scope="col" className="px-20 py-3">
+                  Email
                 </th>
                 <th scope="col" className="px-6 py-3">
                   Vai trò
@@ -77,33 +65,24 @@ const UsersManager = () => {
             <tbody>
               {users?.map((item: any, index: number) => {
                 return (
-                  <tr className="p-10">
-                    <td className="w-4 p-4">
-                      <div className="flex items-center">
-                        <input
-                          id="checkbox-table-search-1"
-                          type="checkbox"
-                          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                        />
-                        <label
-                          htmlFor="checkbox-table-search-1"
-                          className="sr-only"
-                        >
-                          checkbox
-                        </label>
-                      </div>
-                    </td>
+                  <tr>
                     <th
                       scope="row"
                       className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                     >
                       {index + 1}
                     </th>
-                    <td className="px-6 py-4 ">
-                      <img src={item.avatar} alt="" className="w-20 h-100 " />
+                    <td className="px-20 py-4 ">
+                      <img
+                        src={item.avatar}
+                        alt=""
+                        className="w-20 h-20 object-cover "
+                      />
+                    </td>
+                    <td className="w-14 p-2">
+                      {item.firstName + " " + item.lastName}
                     </td>
                     <td className="px-6 py-4 ">{item.email}</td>
-                    <td className="px-6 py-4">{item.phone}</td>
                     <td className="px-6 py-4">
                       <button>
                         {item.role.id === 1 ? "Quản trị viên" : "Người dùng"}

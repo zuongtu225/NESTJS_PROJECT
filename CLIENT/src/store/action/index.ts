@@ -1,12 +1,20 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { IUser } from "../../Interface";
+import { IParams, IProduct, IUser } from "../../Interface";
 import BaseAxios from "../../Api/requsetToken";
 
-export const getApiProducts = createAsyncThunk<any>("products", async () => {
-  const response = await BaseAxios.get("http://localhost:9000/api/v1/products");
-  return response.data;
-});
+export const getApiProducts = createAsyncThunk<IProduct, any>(
+  "products",
+  async (data: IParams) => {
+    const response = await BaseAxios.get(
+      "http://localhost:9000/api/v1/products",
+      {
+        params: data,
+      }
+    );
+    return response.data;
+  }
+);
 export const getApiCategories = createAsyncThunk<any>(
   "categories",
   async () => {
@@ -60,15 +68,29 @@ export const getApiSizes = createAsyncThunk<any>("sizes", async () => {
   const response = await BaseAxios.get("http://localhost:9000/api/v1/sizes");
   return response.data;
 });
-export const getApiUsers = createAsyncThunk<IUser>("users", async () => {
-  const response = await BaseAxios.get("http://localhost:9000/api/v1/users");
-  return response.data;
-});
+export const getApiUsers = createAsyncThunk<IUser, any>(
+  "users",
+  async (data: IParams) => {
+    const response = await BaseAxios.get("http://localhost:9000/api/v1/users", {
+      params: data,
+    });
+    return response.data;
+  }
+);
 export const getApiOrderItems = createAsyncThunk<any>(
   "orderItems",
   async () => {
     const response = await BaseAxios.get(
       "http://localhost:9000/api/v1/orderItems"
+    );
+    return response.data;
+  }
+);
+export const getDetailOrder = createAsyncThunk<any, any>(
+  "getDetailOrder",
+  async (id: any) => {
+    const response = await BaseAxios.get(
+      `http://localhost:9000/api/v1/orders/${id}`
     );
     return response.data;
   }

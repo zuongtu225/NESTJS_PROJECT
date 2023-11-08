@@ -1,13 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, UpdateResult } from 'typeorm';
-import { IUser } from './interface/user.interface';
+import { ILike, Repository, UpdateResult } from 'typeorm';
+import { ISearch, IUser } from './interface/user.interface';
 import { User } from './entities/user.entity';
 @Injectable()
 export class UserRepository {
-  reverse(refreshToken: any): string | Buffer {
-    throw new Error('Method not implemented.');
-  }
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
@@ -15,9 +12,12 @@ export class UserRepository {
   async create(body: IUser): Promise<any> {
     return await this.userRepository.save(body);
   }
-  async findAll(): Promise<IUser[]> {
-    return await this.userRepository.find();
+  async findAll(data: ISearch): Promise<IUser[]> {
+    return await this.userRepository.find({
+      where: data && { firstName: ILike(`%${data}%`) },
+    });
   }
+
   async findOne(id: number): Promise<User> {
     return await this.userRepository.findOneBy({ id: id });
   }

@@ -26,7 +26,7 @@ const CustomerHeader = () => {
   const carts: any = useSelector((state: any) => state?.cartReducer?.carts);
 
   const [isHidden, setIsHidden] = useState<boolean>(false);
-  const [dataSearch, setDataSearch] = useState<IProduct[]>();
+  const [dataSearch, setDataSearch] = useState<any>();
   const dataProduct = useSelector(
     (state: any) => state?.productReducer?.products
   );
@@ -37,7 +37,7 @@ const CustomerHeader = () => {
     } else {
       setIsHidden(false);
     }
-    const searchProduct = dataProduct.filter((item: IProduct) =>
+    const searchProduct = dataProduct?.filter((item: IProduct) =>
       item.title
         .toLocaleLowerCase()
         .includes(e.target.value.toLocaleLowerCase())
@@ -49,7 +49,7 @@ const CustomerHeader = () => {
   }, [auth]);
   useEffect(() => {
     dispatch(getCartByUser());
-    dispatch(getApiProducts());
+    dispatch(getApiProducts(null));
   }, []);
 
   //log out
@@ -129,24 +129,28 @@ const CustomerHeader = () => {
                 isHidden === false ? "hiddenFormSmall" : "form-search-small "
               } `}
             >
-              {isHidden === false
-                ? ""
-                : dataSearch?.map((item: IProduct) => {
-                    return (
-                      <div
-                        className="item-search"
-                        onClick={() => productDetail(item.id)}
-                      >
-                        <img src={`${item.images[0].url}`} alt="" />
-                        <div className="item-search-name">
-                          <p id="name-search">{item.title}</p>
-                          <p id="price-search">
-                            {item.price.toLocaleString()} đ
-                          </p>
-                        </div>
+              {isHidden === false ? (
+                ""
+              ) : dataSearch?.length > 0 ? (
+                dataSearch?.map((item: IProduct) => {
+                  return (
+                    <div
+                      className="item-search"
+                      onClick={() => productDetail(item.id)}
+                    >
+                      <img src={`${item.images[0].url}`} alt="" />
+                      <div className="item-search-name">
+                        <p id="name-search">{item.title}</p>
+                        <p id="price-search">{item.price.toLocaleString()} đ</p>
                       </div>
-                    );
-                  })}
+                    </div>
+                  );
+                })
+              ) : (
+                <p className=" pt-5 pl-[110px]">
+                  Không có sản phẩm đang tìm kiếm{" "}
+                </p>
+              )}
             </div>
           </div>
 

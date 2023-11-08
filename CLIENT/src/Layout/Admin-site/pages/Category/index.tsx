@@ -38,7 +38,7 @@ const CategoryManager = () => {
   }, []);
   return (
     <div>
-      <AdminHeader title="CATEGORY" />
+      <AdminHeader title="CATEGORY" slug={"CATEGORY"} />
       <ToastContainer />
       <div className="content users">
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg mt-5">

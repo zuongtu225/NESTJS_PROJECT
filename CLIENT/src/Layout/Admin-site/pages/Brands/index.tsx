@@ -39,7 +39,7 @@ const BrandsManager = () => {
 
   return (
     <div>
-      <AdminHeader title="BRANDS" />
+      <AdminHeader title="BRANDS" slug="BRANDS" />
       <ToastContainer />
       <div className="content ">
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg mt-5">

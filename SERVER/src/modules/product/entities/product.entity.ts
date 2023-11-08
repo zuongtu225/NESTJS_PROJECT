@@ -42,10 +42,14 @@ export class Product {
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   updateAt: Date;
 
-  @ManyToOne(() => Category)
+  @ManyToOne(() => Category, {
+    eager: true,
+  })
   category: Category;
 
-  @ManyToOne(() => Brand)
+  @ManyToOne(() => Brand, {
+    eager: true,
+  })
   brand: Brand;
 
   @OneToMany(() => Image, (product) => product.productId, {

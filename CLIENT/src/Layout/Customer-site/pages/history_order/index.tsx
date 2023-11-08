@@ -4,24 +4,54 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../../../store";
 import {
   getCartByUser,
+  getDetailOrder,
   getDetailUser,
   getHistoryOrders,
   getOrderApi,
 } from "../../../../store/action";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import { BsFillCartCheckFill } from "react-icons/bs";
 import { Button } from "flowbite-react";
+import { updateOrderApi } from "../../../../Api/order";
+import { HistoryModal } from "./historyForm";
 const HistoryOrders = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
+  const [open, setOpen] = useState<boolean>(false);
+  const handleClose = (open: boolean) => {
+    setOpen(open);
+  };
   const userDetail: any = useSelector(
     (state: any) => state?.userReducer?.userDetail
   );
+  const handleDetail = async (id: number) => {
+    await dispatch(getDetailOrder(id));
+    setOpen(!open);
+  };
+
   const [quantity, setQuantity] = useState<number>(0);
   const carts: any = useSelector((state: any) => state?.cartReducer?.carts);
   const historyOrders = useSelector(
     (state: any) => state?.orderReducer?.historyOrders
   );
+  const updateOrder = async (id: number) => {
+    const orderNeedChange = historyOrders?.find((item: any) => item.id === id);
+    const updateCancel = {
+      id: orderNeedChange.id,
+      status: "Cancel",
+      codeOrder: orderNeedChange.codeOrder,
+    };
+    const reCancel: any = await updateOrderApi(updateCancel);
+    if (reCancel?.data?.success === true) {
+      toast.success("Đơn hàng đã bị hủy ");
+      setTimeout(() => {
+        dispatch(getHistoryOrders());
+      }, 1500);
+    } else {
+      toast.error("Thất bại do lỗi yêu cầu đến API");
+    }
+  };
+
   useEffect(() => {
     dispatch(getDetailUser());
     dispatch(getCartByUser());
@@ -67,6 +97,7 @@ const HistoryOrders = () => {
               </tr>
             </thead>
             <tbody>
+              <HistoryModal open={open} handleClose={handleClose} />
               {historyOrders?.map((item: any, index: number) => {
                 return (
                   <tr key={item.id} className="p-10">
@@ -85,8 +116,10 @@ const HistoryOrders = () => {
                         <p className="text-green-400">
                           Đơn hàng đang chờ xác nhận
                         </p>
+                      ) : item.status === "Cancel" ? (
+                        <p>Đơn hàng đã hủy</p>
                       ) : (
-                        <p>{item.status}</p>
+                        <p>Đơn hàng đã giao</p>
                       )}
                     </td>
                     <td className="px-6 py-4 w-[150px]">
@@ -94,11 +127,17 @@ const HistoryOrders = () => {
                     </td>
                     <td className="px-10 py- 4">
                       {item.status === "Pending" ? (
-                        <button className="w-30 bg-red-500 text-red-100 px-5 py-2 font-semibol m-2">
+                        <button
+                          onClick={() => updateOrder(item.id)}
+                          className="w-30 bg-red-500 text-red-100 px-5 py-2 font-semibol m-2"
+                        >
                           Hủy đơn
                         </button>
                       ) : (
-                        <button className="w-30 bg-green-500 text-red-100 px-4 py-2 font-semibol m-2">
+                        <button
+                          onClick={() => handleDetail(item.id)}
+                          className="w-30 bg-green-500 text-red-100 px-4 py-2 font-semibol m-2"
+                        >
                           Chi tiết
                         </button>
                       )}

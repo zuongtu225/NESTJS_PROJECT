@@ -221,7 +221,7 @@ const Checkout = () => {
     dispatch(getOrderApi());
     dispatch(getCartByUser());
     dispatch(getDetailUser());
-    dispatch(getApiProducts());
+    dispatch(getApiProducts(null));
   }, []);
   return (
     <div>

@@ -1,14 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { IUser } from './interface/user.interface';
+import { ISearch, IUser } from './interface/user.interface';
 import { IResponse } from 'src/shared/interfaces/response.interface';
 import { UserRepository } from './user.repository';
 import { User } from './entities/user.entity';
-import * as bcrypt from 'bcrypt';
 @Injectable()
 export class UserService {
   constructor(private readonly userRepository: UserRepository) {}
-  async getAllUsers(): Promise<IUser[]> {
-    return await this.userRepository.findAll();
+  async getAllUsers(data: ISearch): Promise<IUser[]> {
+    return await this.userRepository.findAll(data);
   }
   async getDetailUser(id: number): Promise<User | IResponse> {
     const response = await this.userRepository.findOne(id);

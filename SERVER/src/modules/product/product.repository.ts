@@ -1,10 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeleteResult, Repository, UpdateResult } from 'typeorm';
+import { DeleteResult, ILike, Repository, UpdateResult } from 'typeorm';
 import { IProduct } from './interface/Product.interface';
 import { Product } from './entities/product.entity';
 import { ProductDto } from './dto/product.dto';
-import { IResponse } from 'src/shared/interfaces/response.interface';
 @Injectable()
 export class ProductRepository {
   constructor(
@@ -14,9 +13,9 @@ export class ProductRepository {
   async create(body: ProductDto): Promise<IProduct> {
     return await this.productRepository.save(body);
   }
-  async findAll(): Promise<ProductDto[]> {
+  async findAll(title: string): Promise<ProductDto[]> {
     return await this.productRepository.find({
-      relations: ['category', 'brand', 'images'],
+      where: title && { title: ILike(`%${title}%`) },
     });
   }
   async findOne(id: number): Promise<IProduct> {

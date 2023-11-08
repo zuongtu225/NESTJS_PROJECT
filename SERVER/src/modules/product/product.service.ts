@@ -17,8 +17,8 @@ export class ProductService {
     }
     throw new BadRequestException('Tạo Product thất bại');
   }
-  async getAllProductService(): Promise<ProductDto[]> {
-    return await this.productRepository.findAll();
+  async getAllProductService(title: string): Promise<ProductDto[]> {
+    return await this.productRepository.findAll(title);
   }
   async getDetailProduct(id: number): Promise<IProduct | IResponse> {
     const response = await this.productRepository.findOne(id);

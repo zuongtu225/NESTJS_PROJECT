@@ -34,7 +34,7 @@ const PaymentManager = () => {
   }, []);
   return (
     <div>
-      <AdminHeader title={"PAYMENTS"} />
+      <AdminHeader title={"PAYMENTS"} slug={"PAYMENTS"} />
       <ToastContainer />
       <div className="content ">
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg mt-5">

@@ -6,6 +6,7 @@ import { AppDispatch } from "../../../../store";
 import { getDetailUser } from "../../../../store/action";
 import { AddModal } from "../modal/AddModal.1";
 import { Iprops } from "../../../../Interface";
+import SearchComponent from "../search";
 
 // Header nhận props title từ các PAGES
 const AdminHeader = (props: Iprops) => {
@@ -33,12 +34,7 @@ const AdminHeader = (props: Iprops) => {
           Search
         </label>
         <div className="relative w-[70%]">
-          <input
-            type="text"
-            id="voice-search"
-            className=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="Tìm...."
-          />
+          <SearchComponent slug={props.slug} />
           <button
             type="button"
             className="absolute inset-y-0 right-0 flex items-center pr-3"

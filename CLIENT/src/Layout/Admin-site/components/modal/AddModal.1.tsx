@@ -80,7 +80,7 @@ export function AddModal(props: any): any {
           props.handleClose(false);
           toast.success(resProduct.data.message);
           setTimeout(() => {
-            dispatch(getApiProducts());
+            dispatch(getApiProducts(null));
           }, 2000);
         } else {
           props.handleClose(false);

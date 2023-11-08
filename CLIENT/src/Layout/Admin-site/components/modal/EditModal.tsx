@@ -47,7 +47,7 @@ export function EditModal(props: any) {
           toast.success(responseProduct.data.message);
           props.handleClose(false);
           setTimeout(() => {
-            dispatch(getApiProducts());
+            dispatch(getApiProducts(null));
           }, 2000);
         } else {
           props.handleClose(false);

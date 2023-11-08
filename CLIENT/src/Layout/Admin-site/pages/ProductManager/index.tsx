@@ -3,8 +3,6 @@ import AdminHeader from "../../components/layout/Header";
 import { useDispatch, useSelector } from "react-redux";
 import { getApiProducts } from "../../../../store/action";
 import { AppDispatch } from "../../../../store";
-import ButtonEdit from "../../components/Button/ButtonEditProduct";
-import { EditModal } from "../../components/modal/EditModal";
 import { updateStatusProduct } from "../../../../Api";
 import { ToastContainer, toast } from "react-toastify";
 import ButtonEditProduct from "../../components/Button/ButtonEditProduct";
@@ -13,7 +11,7 @@ const ProductManager = () => {
   const dispatch = useDispatch<AppDispatch>();
   const data = useSelector((state: any) => state?.productReducer?.products);
   useEffect(() => {
-    dispatch(getApiProducts());
+    dispatch(getApiProducts(null));
   }, []);
   const handleStatus = async (status: any, id: number) => {
     const newStatus = +status === 1 ? true : false;
@@ -21,7 +19,7 @@ const ProductManager = () => {
     if (response.data.success === true) {
       setTimeout(async () => {
         toast.success(response.data.message);
-        await dispatch(getApiProducts());
+        await dispatch(getApiProducts(null));
       }, 1000);
     } else {
       toast.error(response.data.message);
@@ -30,7 +28,7 @@ const ProductManager = () => {
 
   return (
     <div>
-      <AdminHeader title="PRODUCTS" />
+      <AdminHeader title="PRODUCTS" slug="PRODUCTS" />
       <ToastContainer />
       <div className="content">
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
@@ -55,7 +53,7 @@ const ProductManager = () => {
                 <th scope="col" className="px-6 py-3">
                   Tên sản phẩm
                 </th>
-                <th scope="col" className="px-6 py-3">
+                <th scope="col" className="px-10 py-3">
                   Thương Hiệu
                 </th>
                 <th scope="col" className="px-6 py-3">

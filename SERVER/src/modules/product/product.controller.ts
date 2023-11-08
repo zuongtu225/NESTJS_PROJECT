@@ -1,6 +1,6 @@
 import { ProductService } from './product.service';
 import * as dotenv from 'dotenv';
-import { IProduct } from './interface/product.interface';
+import { IProduct, ITitle } from './interface/product.interface';
 import { LoggingInterceptor } from 'src/shared/interceptor/logging.interceptor';
 import {
   Controller,
@@ -13,6 +13,7 @@ import {
   UseGuards,
   Post,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { IResponse } from 'src/shared/interfaces/response.interface';
 import { AuthenGuard } from 'src/shared/guards/authen.guard';
@@ -34,8 +35,8 @@ export class ProductController {
     return await this.productService.createProductService(body);
   }
   @Get()
-  async getAllProducts(): Promise<ProductDto[]> {
-    return await this.productService.getAllProductService();
+  async getAllProducts(@Query() title: ITitle): Promise<any> {
+    return await this.productService.getAllProductService(title.title);
   }
   @Get('/:id')
   async getDetailProduct(

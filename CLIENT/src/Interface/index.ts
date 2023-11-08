@@ -28,10 +28,18 @@ export interface ICategory {
 }
 export interface Iprops {
   title: string;
+  slug: string;
 }
+export interface IParams {
+  title: string;
+}
+
 export interface IPayment {
   id: number;
   title: string;
+}
+export interface Search {
+  slug: string;
 }
 export interface ISize {
   id: number;

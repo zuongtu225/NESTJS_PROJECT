@@ -24,7 +24,7 @@ const Home = () => {
   );
 
   useEffect(() => {
-    dispatch(getApiProducts());
+    dispatch(getApiProducts(null));
   }, []);
 
   useEffect(() => {

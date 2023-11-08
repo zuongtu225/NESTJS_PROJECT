@@ -15,7 +15,7 @@ const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   useEffect(() => {
-    dispatch(getApiUsers());
+    dispatch(getApiUsers(null));
   }, []);
   const login = async (e: any) => {
     e.preventDefault();

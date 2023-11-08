@@ -34,6 +34,7 @@ export class OrderRepository {
       .leftJoinAndSelect('order.orderItems', 'OrderItem')
       .leftJoinAndSelect('OrderItem.productSizeId', 'productSizeId')
       .leftJoinAndSelect('productSizeId.productId', 'productId')
+      // .leftJoinAndSelect('productId.brandId', 'brandId')
       .leftJoinAndSelect('productSizeId.sizeId', 'sizeId')
       .leftJoinAndSelect('order.addressId', 'address')
       .where('order.userId = :userId', { userId: id })

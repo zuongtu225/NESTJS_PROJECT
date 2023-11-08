@@ -6,7 +6,7 @@ import AdminHeader from "../../components/layout/Header";
 const VoucherManager = () => {
   return (
     <div>
-      <AdminHeader title={"VOUCHERS "} />
+      <AdminHeader title={"VOUCHERS "} slug={"VOUCHERS"} />
       <div className="content brands">
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg mt-5">
           <table className="w-full  text-sm text-left text-gray-500 dark:text-gray-400">

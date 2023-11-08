@@ -1,6 +1,6 @@
 import { UserService } from './user.service';
 import * as dotenv from 'dotenv';
-import { IUser } from './interface/user.interface';
+import { ISearch, IUser } from './interface/user.interface';
 import { LoggingInterceptor } from 'src/shared/interceptor/logging.interceptor';
 import {
   Controller,
@@ -13,6 +13,7 @@ import {
   Request,
   UseGuards,
   UploadedFile,
+  Query,
 } from '@nestjs/common';
 import { AuthenGuard } from 'src/shared/guards/authen.guard';
 import { AuthorGuard } from 'src/shared/guards/author.guard';
@@ -21,6 +22,7 @@ import { IResponse } from 'src/shared/interfaces/response.interface';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CloudinaryService } from 'src/shared/utils/cloudinary/cloudinary.service';
 import { User } from './entities/user.entity';
+import { ITitle } from '../product/interface/Product.interface';
 dotenv.config();
 const init = process.env.API_URL;
 
@@ -33,8 +35,8 @@ export class UserController {
     private readonly cloudinaryService: CloudinaryService,
   ) {}
   @Get()
-  async getAllUsers(): Promise<any> {
-    return await this.userService.getAllUsers();
+  async getAllUsers(@Query() data: ISearch): Promise<any> {
+    return await this.userService.getAllUsers(data);
   }
   @Get('/me')
   @UseGuards(AuthenGuard)

@@ -6,3 +6,7 @@ export class IUser {
   avatar: string;
   status: boolean;
 }
+
+export interface ISearch {
+  data: string;
+}
