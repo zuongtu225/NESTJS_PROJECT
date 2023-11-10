@@ -28,7 +28,7 @@ export class ProductRepository {
   async updateProduct(id: number, body: IProduct): Promise<UpdateResult> {
     return await this.productRepository.update(id, body);
   }
-  async deleteSize(id: number): Promise<DeleteResult> {
+  async delete(id: number): Promise<DeleteResult> {
     return await this.productRepository.delete(id);
   }
 }

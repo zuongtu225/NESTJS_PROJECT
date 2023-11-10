@@ -4,7 +4,7 @@ import { ProductSizeDto } from './dto/productSize.dto';
 import { IProductSize } from './interface/productSize.interface';
 import { ProductSizeRepository } from './productSize.repository';
 import { ProductSize } from './entities/productSize.entity';
-import { UpdateResult } from 'typeorm';
+import { IProduct } from '../product/interface/Product.interface';
 @Injectable()
 export class ProductSizeService {
   constructor(private readonly productSizeRepository: ProductSizeRepository) {}
@@ -41,7 +41,7 @@ export class ProductSizeService {
     }
     return response;
   }
-  async updateProductService(body: ProductSizeDto): Promise<any> {
+  async updateProductSizeService(body: ProductSizeDto): Promise<any> {
     // let response: IProductSize;
     for (const size of body.sizeId) {
       const productSize: IProductSize = {
@@ -49,7 +49,6 @@ export class ProductSizeService {
         sizeId: size,
       };
       console.log(body);
-
       // response =
       // await this.productSizeRepository.updateProductSize(productSize);
     }
@@ -61,5 +60,20 @@ export class ProductSizeService {
     //   };
     // }
     // throw new BadRequestException('Tạo ProductSize thất bại');
+  }
+  async deleteProductSizeService(id: IProduct): Promise<IResponse> {
+    const response = await this.productSizeRepository.delete(id);
+    if (response.affected > 0) {
+      return {
+        data: null,
+        success: true,
+        message: 'Xoá thành công',
+      };
+    }
+    return {
+      data: null,
+      success: false,
+      message: 'Id product không đúng',
+    };
   }
 }

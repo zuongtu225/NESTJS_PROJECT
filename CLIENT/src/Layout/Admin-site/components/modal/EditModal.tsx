@@ -7,7 +7,13 @@ import {
   DialogFooter,
 } from "@material-tailwind/react";
 import EditProductForm from "./FormEdit/EditProductForm";
-import { IBrand, ICategory, IPayment, IProduct } from "../../../../Interface";
+import {
+  IBrand,
+  ICategory,
+  IPayment,
+  IProduct,
+  IProductSize,
+} from "../../../../Interface";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../../store";
 import {
@@ -16,7 +22,7 @@ import {
   getApiProducts,
   getPayments,
 } from "../../../../store/action";
-import { updateProduct } from "../../../../Api";
+import { createProductSize, updateProduct } from "../../../../Api";
 import { toast } from "react-toastify";
 import EditBrandForm from "./FormEdit/EditBrandForm";
 import { updateBrand } from "../../../../Api/brands";
@@ -31,6 +37,7 @@ export function EditModal(props: any) {
   const [brandUpdate, setBrandUpdate] = useState<IBrand>();
   const [categoryUpdate, setCategoryUpdate] = useState<ICategory>();
   const [paymentUpdate, setPaymentUpdate] = useState<IPayment>();
+  const [sizeValue, setSizeValue] = useState<number[]>([]);
 
   useEffect(() => {
     setOpen(props.open);
@@ -44,6 +51,11 @@ export function EditModal(props: any) {
       case "PRODUCTS":
         const responseProduct: any = await updateProduct(productUpdate);
         if (responseProduct?.data?.success === true) {
+          const productSize = {
+            productId: productUpdate?.id,
+            sizeId: sizeValue,
+          };
+          await createProductSize(productSize);
           toast.success(responseProduct.data.message);
           props.handleClose(false);
           setTimeout(() => {
@@ -96,11 +108,12 @@ export function EditModal(props: any) {
     }
   };
 
-  const handleGetData = (dataUpdate: any) => {
+  const handleGetData = (dataUpdate: any, sizeValue: any) => {
     setProductUpdate(dataUpdate);
     setBrandUpdate(dataUpdate);
     setCategoryUpdate(dataUpdate);
     setPaymentUpdate(dataUpdate);
+    setSizeValue(sizeValue);
   };
   return (
     <div>

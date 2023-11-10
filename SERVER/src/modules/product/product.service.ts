@@ -48,8 +48,8 @@ export class ProductService {
     };
   }
 
-  async deleteSizeService(id: number): Promise<IResponse> {
-    const response = await this.productRepository.deleteSize(id);
+  async deleteProductService(id: number): Promise<IResponse> {
+    const response = await this.productRepository.delete(id);
     if (response.affected == 1) {
       return {
         data: null,

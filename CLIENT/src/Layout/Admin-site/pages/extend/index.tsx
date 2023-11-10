@@ -3,8 +3,10 @@ import { Outlet, useNavigate } from "react-router-dom";
 import SideBar from "../../components/layout/SideBar";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../../../store";
-import { getDetailUser } from "../../../../store/action";
-
+import { getDetailUser, getOrderApi } from "../../../../store/action";
+import { toast } from "react-toastify";
+import { io } from "socket.io-client";
+const socket = io("http://localhost:9000");
 const AdminExtend = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
@@ -13,6 +15,15 @@ const AdminExtend = () => {
   );
   useEffect(() => {
     dispatch(getDetailUser());
+  }, []);
+  useEffect(() => {
+    socket.on("message", (newMessage) => {
+      const order = async () => {
+        dispatch(getOrderApi());
+        toast.success("Co don hang moi");
+      };
+      order();
+    });
   }, []);
   useEffect(() => {
     if (userDetail?.role?.role === 2) {

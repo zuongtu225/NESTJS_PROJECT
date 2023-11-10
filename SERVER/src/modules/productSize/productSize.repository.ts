@@ -5,6 +5,7 @@ import { ProductSize } from './entities/productSize.entity';
 import { IProductSize } from './interface/productSize.interface';
 import { ProductSizeDto } from './dto/productSize.dto';
 import { IResponse } from 'src/shared/interfaces/response.interface';
+import { IProduct } from '../product/interface/Product.interface';
 @Injectable()
 export class ProductSizeRepository {
   constructor(
@@ -23,8 +24,7 @@ export class ProductSizeRepository {
       relations: ['productId', 'sizeId'],
     });
   }
-
-  async updateProductSize(body: IProductSize): Promise<any> {
-    // return await this.productSizeRepository.update(id, body);
+  async delete(id: IProduct): Promise<any> {
+    return await this.productSizeRepository.delete({ productId: id });
   }
 }

@@ -167,7 +167,6 @@ const Login = () => {
               </p>
               <ButtonGoogle />
             </div>
-            {/* goggole */}
           </div>
         </div>
       </div>

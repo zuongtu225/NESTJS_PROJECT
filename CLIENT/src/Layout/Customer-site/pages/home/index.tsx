@@ -214,10 +214,6 @@ const Home = () => {
                   ) : (
                     ""
                   )}
-                  {/* $
-                  {authUser
-                    ? `<i  onclick="addCart('${product.id}')" class="bx bx-cart-add"></i>`
-                    : ""} */}
                 </div>
               </div>
             </div>

@@ -43,11 +43,7 @@ const UsersManager = () => {
           <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
             <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
               <tr>
-                <th scope="col" className="px-6 py-3">
-                  ID
-                </th>
-
-                <th scope="col" className="px-20 py-3">
+                <th scope="col" className="px-15 py-3">
                   Avatar
                 </th>
                 <th scope="col" className="px-20 py-3">
@@ -71,29 +67,23 @@ const UsersManager = () => {
               {data?.map((item: any, index: number) => {
                 return (
                   <tr>
-                    <th
-                      scope="row"
-                      className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                    >
-                      {index + 1}
-                    </th>
-                    <td className="px-20 py-4 ">
+                    <td className="pl-10 py-2 ">
                       <img
                         src={item.avatar}
                         alt=""
                         className="w-20 h-20 object-cover "
                       />
                     </td>
-                    <td className="w-14 p-2">
+                    <td className="px-1 py-2">
                       {item.firstName + " " + item.lastName}
                     </td>
-                    <td className="px-6 py-4 ">{item.email}</td>
-                    <td className="px-6 py-4">
+                    <td className="px-1 py-2 ">{item.email}</td>
+                    <td className="px-1 py-2">
                       <button>
                         {item.role.id === 1 ? "Quản trị viên" : "Người dùng"}
                       </button>
                     </td>
-                    <td className="px-6 py-4 ">
+                    <td className="px-1 py-2 ">
                       {item.role.id === 2 && (
                         <select
                           onChange={(e: any) =>
@@ -110,7 +100,7 @@ const UsersManager = () => {
                       )}
                     </td>
 
-                    <td className="px-6 py-4">
+                    <td className="px-1 py-2">
                       {item.role.id === 2 && (
                         <div>
                           <button className="w-30 bg-green-500 text-red-100 px-5 py-2 font-semibol m-2">

@@ -19,7 +19,7 @@ const ButtonGoogle = (props: Props) => {
     <div className="w-2/12  mt-3 m-auto max-w-full px-1 mr-auto flex-0">
       <a
         onClick={handleClick}
-        className="inline-block w-full px-6 py-3 mb-4 font-bold text-center text-gray-200 uppercase align-middle transition-all bg-transparent border border-gray-200 border-solid rounded-lg shadow-none cursor-pointer hover:scale-102 leading-pro text-xs ease-soft-in tracking-tight-soft bg-150 bg-x-25 hover:bg-transparent hover:opacity-75"
+        className="inline-block w-full px-5 py-2  mb-4 font-bold text-center text-gray-200 uppercase align-middle transition-all bg-transparent border border-gray-200 border-solid rounded-lg shadow-none cursor-pointer hover:scale-102 leading-pro text-xs ease-soft-in tracking-tight-soft bg-150 bg-x-25 hover:bg-transparent hover:opacity-75"
       >
         <svg
           xmlnsXlink="http://www.w3.org/1999/xlink"

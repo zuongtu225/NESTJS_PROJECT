@@ -57,6 +57,6 @@ export class ProductController {
   @UseGuards(AuthorGuard)
   @UseGuards(AuthenGuard)
   async deleteProduct(@Param('id') id: number): Promise<IResponse> {
-    return await this.productService.deleteSizeService(id);
+    return await this.productService.deleteProductService(id);
   }
 }

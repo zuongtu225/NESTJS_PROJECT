@@ -9,6 +9,7 @@ import {
   getDetailProduct,
 } from "../../../../../store/action";
 import { updateImage } from "../../../../../Api/images";
+import { deleteProductSizes } from "../../../../../Api";
 
 const EditProductForm = (props: any) => {
   const dispatch = useDispatch<AppDispatch>();
@@ -18,10 +19,32 @@ const EditProductForm = (props: any) => {
   const categories = useSelector(
     (state: any) => state?.categoryReducer?.categories
   );
-  const [sizeValue, setSizeValue] = useState<any>([]);
+  const listSize = productDetail?.productSizes?.map(
+    (item: any) => item.sizeId.id
+  );
+  console.log(productDetail?.productSizes);
+  const [sizeValue, setSizeValue] = useState<any>(listSize);
+  const [error, setError] = useState<boolean>(false);
   const sizes = useSelector((state: any) => state?.sizeReducer?.sizes);
-
+  const handleCheckboxChange = async (id: number) => {
+    const updateCheckSize = [...sizeValue];
+    const index = updateCheckSize.indexOf(id);
+    // check size có đã có chưa
+    if (index !== -1) {
+      updateCheckSize.splice(index, 1);
+      setSizeValue(updateCheckSize);
+      if (sizeValue.length > 1) {
+        await deleteProductSizes(productDetail.id);
+      } else {
+        setError(true);
+      }
+      // await dispatch(getDetailProduct(productDetail.id));
+    } else {
+      setSizeValue([...sizeValue, id]);
+    }
+  };
   const brands = useSelector((state: any) => state?.brandReducer?.brands);
+
   const [newProduct, setNewProduct] = useState<any>({
     id: productDetail.id,
     title: productDetail.title,
@@ -57,8 +80,8 @@ const EditProductForm = (props: any) => {
   }, []);
 
   useEffect(() => {
-    props.handleGetData(newProduct);
-  }, [newProduct]);
+    props.handleGetData(newProduct, sizeValue);
+  }, [newProduct, sizeValue]);
 
   return (
     <div>
@@ -67,7 +90,7 @@ const EditProductForm = (props: any) => {
           <div className="md:w-1/2 px-3  md:mb-0">
             <label>Tên sản phẩm</label>
             <input
-              className="appearance-none block w-full bg-grey-lighter text-grey-darker border border-red rounded py-3 px-4 mb-3"
+              className="appearance-none block w-full bg-grey-lighter text-grey-darker border border-red rounded   px-4 mb-3"
               id="grid-first-name"
               type="text"
               name="title"
@@ -79,7 +102,7 @@ const EditProductForm = (props: any) => {
             <div className="relative">
               <label>Thương hiệu</label>
               <select
-                className="block appearance-none w-full bg-grey-lighter border border-grey-lighter text-grey-darker py-3 px-4 pr-8 rounded"
+                className="block appearance-none w-full bg-grey-lighter border border-grey-lighter text-grey-darker   px-4 pr-8 rounded"
                 id="grid-state"
                 name="brand"
                 onChange={handleChange}
@@ -100,7 +123,7 @@ const EditProductForm = (props: any) => {
           <div className="md:w-[80%] px-3">
             <label>Mô tả</label>
             <textarea
-              className="appearance-none h-[130px] mb-4 block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4 "
+              className="appearance-none h-[100px] mb-4 block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4 "
               id="grid-password"
               value={newProduct.description}
               name="description"
@@ -110,19 +133,36 @@ const EditProductForm = (props: any) => {
           <div className="md:w-[20%] px-3 ">
             <div className="relative ">
               <label>Dung tích:</label>
-              {productDetail?.productSizes?.map((item: any) => {
-                const size = item.sizeId.size.slice(14);
-                return (
-                  <div key={item.id} className="mr-2 flex items-center">
-                    <label className="block">{size}</label>
-                    <input
-                      type="checkbox"
-                      className="w-50 h-50 cursor-pointer ml-4"
-                      checked={item.id}
-                    />
-                  </div>
-                );
-              })}
+              <td>
+                {sizes?.map((item: any, index: number) => {
+                  const sizeSelected = sizeValue?.some(
+                    (selectedItem: any) => selectedItem === item.id
+                  );
+                  return (
+                    <div key={index} className="inline-flex items-center">
+                      <label
+                        className="relative flex items-center rounded-full cursor-pointer"
+                        htmlFor="login"
+                        data-ripple-dark="true"
+                      >
+                        <input
+                          value={item.id}
+                          onChange={() => handleCheckboxChange(item.id)}
+                          type="checkbox"
+                          checked={sizeSelected}
+                          className="before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-md border border-blue-gray-200 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:border-pink-500 checked:bg-pink-500 checked:before:bg-pink-500 hover:before:opacity-10"
+                        />
+                      </label>
+                      <label
+                        className="mt-px font-light pl-2 text-gray-700 cursor-pointer select-none"
+                        htmlFor="login"
+                      >
+                        {item.size.slice(13)}
+                      </label>
+                    </div>
+                  );
+                })}
+              </td>
             </div>
           </div>
         </div>
@@ -130,7 +170,7 @@ const EditProductForm = (props: any) => {
           <div className="md:w-1/2 px-3 mb-6 md:mb-0">
             <label>Giá</label>
             <input
-              className="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4"
+              className="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded  px-4"
               id="grid-city"
               type="number"
               value={newProduct.price}
@@ -138,10 +178,10 @@ const EditProductForm = (props: any) => {
               onChange={handleChange}
             />
           </div>
-          <div className="md:w-1/2 px-3">
+          <div className="md:w-1/2 ">
             <label>Số lượng</label>
             <input
-              className="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4"
+              className="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded   px-4"
               id="grid-zip"
               type="number"
               name="stock"
@@ -153,7 +193,7 @@ const EditProductForm = (props: any) => {
             <div className="relative">
               <label>Loại</label>
               <select
-                className="block appearance-none w-full bg-grey-lighter border border-grey-lighter text-grey-darker py-3 px-4 pr-8 rounded"
+                className="block appearance-none w-full bg-grey-lighter border border-grey-lighter text-grey-darker  px-4 pr-8 rounded"
                 id="grid-state"
                 name="category"
                 onChange={handleChange}

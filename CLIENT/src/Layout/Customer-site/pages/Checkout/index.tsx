@@ -159,11 +159,11 @@ const Checkout = () => {
       }));
       const orderItem: any = await createOrderItem(newOrderItems);
       if (orderItem?.data?.success === true) {
+        socket.emit("message", "Click!");
         await updateStock(productIds, quantities);
         toast.success(resOrder.data.message);
         await deleteCart();
         await dispatch(getCartByUser());
-        socket.emit("message", " Bạn có đơn hàng mới");
         setTimeout(() => {
           navigate("/");
         }, 1500);
