@@ -25,7 +25,6 @@ const init = process.env.API_URL;
 @Controller(`${init}/productSizes`)
 @UseInterceptors(ClassSerializerInterceptor)
 @UseInterceptors(LoggingInterceptor)
-@UseGuards(AuthenGuard)
 export class ProductSizeController {
   constructor(private readonly productSizeService: ProductSizeService) {}
   @Post()
@@ -42,5 +41,10 @@ export class ProductSizeController {
     @Param('id') id: number,
   ): Promise<ProductSize[] | IResponse> {
     return await this.productSizeService.getDetailProductSize(+id);
+  }
+  @Put('/')
+  @UseGuards(AuthenGuard)
+  async updateProductSize(@Body() body: any): Promise<any> {
+    return await this.productSizeService.getDetailProductSize(body);
   }
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeleteResult, Repository } from 'typeorm';
+import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { ProductSize } from './entities/productSize.entity';
 import { IProductSize } from './interface/productSize.interface';
 import { ProductSizeDto } from './dto/productSize.dto';
@@ -22,5 +22,9 @@ export class ProductSizeRepository {
       where: { productId: id },
       relations: ['productId', 'sizeId'],
     });
+  }
+
+  async updateProductSize(body: IProductSize): Promise<any> {
+    // return await this.productSizeRepository.update(id, body);
   }
 }

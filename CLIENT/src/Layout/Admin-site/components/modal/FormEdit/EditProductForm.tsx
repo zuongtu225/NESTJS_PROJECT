@@ -18,6 +18,7 @@ const EditProductForm = (props: any) => {
   const categories = useSelector(
     (state: any) => state?.categoryReducer?.categories
   );
+  const [sizeValue, setSizeValue] = useState<any>([]);
   const sizes = useSelector((state: any) => state?.sizeReducer?.sizes);
 
   const brands = useSelector((state: any) => state?.brandReducer?.brands);
@@ -95,11 +96,11 @@ const EditProductForm = (props: any) => {
             </div>
           </div>
         </div>
-        <div className="-mx-3 md:flex mb-6">
+        <div className="-mx-3 md:flex  ">
           <div className="md:w-[80%] px-3">
             <label>Mô tả</label>
             <textarea
-              className="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4 mb-3"
+              className="appearance-none h-[130px] mb-4 block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4 "
               id="grid-password"
               value={newProduct.description}
               name="description"
@@ -109,7 +110,6 @@ const EditProductForm = (props: any) => {
           <div className="md:w-[20%] px-3 ">
             <div className="relative ">
               <label>Dung tích:</label>
-              {/* size */}
               {productDetail?.productSizes?.map((item: any) => {
                 const size = item.sizeId.size.slice(14);
                 return (

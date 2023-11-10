@@ -4,13 +4,7 @@ import SideBar from "../../components/layout/SideBar";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../../../store";
 import { getDetailUser } from "../../../../store/action";
-// import { Server } from "socket.io";
-// const io = new Server(3000);
-// io.on("connection", (socket) => {
-//   socket.on("message", (message) => {
-//     console.log(message, "<<<<<<====");
-//   });
-// });
+
 const AdminExtend = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();

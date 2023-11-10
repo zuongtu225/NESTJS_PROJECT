@@ -105,7 +105,7 @@ export function EditModal(props: any) {
   return (
     <div>
       <Dialog open={open} handler={ClickClose}>
-        <DialogHeader> Form Sửa </DialogHeader>
+        {/* <DialogHeader> Form Sửa </DialogHeader> */}
         <DialogBody divider>
           {props.title === "PRODUCTS" && (
             <div>

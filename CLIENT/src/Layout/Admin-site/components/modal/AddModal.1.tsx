@@ -32,7 +32,7 @@ export function AddModal(props: any): any {
   const [category, setCategory] = useState<any>();
   const [images, setImages] = useState<any>();
   const [brand, setBrand] = useState<any>();
-  const [size, setSize] = useState<any>();
+  const [sizes, setSizes] = useState<any>();
   const [payment, setPayment] = useState<any>();
   const [open, setOpen] = useState(props.open);
 
@@ -45,7 +45,7 @@ export function AddModal(props: any): any {
   const handleGetProduct = (data: IProduct, formData: any, sizeId: ISize) => {
     setProduct(data);
     setImages(formData);
-    setSize(sizeId);
+    setSizes(sizeId);
   };
   const handleGetBrand = (data: IBrand) => {
     setBrand({ title: data });
@@ -65,7 +65,7 @@ export function AddModal(props: any): any {
         if (resProduct?.data?.success === true) {
           const productSize = {
             productId: resProduct.data?.data?.id,
-            sizeId: size,
+            sizeId: sizes,
           };
           await createProductSize(productSize);
           const formData = new FormData();

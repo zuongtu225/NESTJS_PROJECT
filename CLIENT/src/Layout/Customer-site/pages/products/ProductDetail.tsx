@@ -29,11 +29,14 @@ const ProductsDetail = () => {
   const productSizes = useSelector(
     (state: any) => state?.productSizeReducer?.productSizes
   );
+
   const productId = Number(id);
   // render
   const newProductSize = productSizes?.filter(
     (item: any) => item.productId.id === productId
   );
+  console.log(newProductSize, "44");
+
   const productSizeId = productSizes?.find(
     (item: any) => item.productId.id === productId && item.sizeId.id === sizeId
   );
@@ -172,7 +175,7 @@ const ProductsDetail = () => {
                       className="size-ml "
                       onClick={() => setSizeID(item.sizeId.id)}
                     >
-                      <img src={productDetail?.images[2]?.url} alt="" />
+                      <img src={item.productId?.images[0]?.url} alt="" />
                       <p>{item.sizeId.size}</p>
                     </div>
                   );

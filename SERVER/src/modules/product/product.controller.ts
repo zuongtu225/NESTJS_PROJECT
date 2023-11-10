@@ -43,7 +43,7 @@ export class ProductController {
   async getDetailProduct(
     @Param('id') id: number,
   ): Promise<IProduct | IResponse> {
-    return await this.productService.getDetailProduct(id);
+    return await this.productService.getDetailProduct(+id);
   }
   @Put('/:id')
   @UseGuards(AuthenGuard)

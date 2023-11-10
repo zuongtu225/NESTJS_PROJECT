@@ -7,13 +7,15 @@ import { getApiUsers } from "../../store/action";
 import { ToastContainer, toast } from "react-toastify";
 import { loginAPI } from "../../Api/auth";
 import ButtonGoogle from "./button-google";
-
+import * as io from "socket.io-client";
+const socket = io.connect("http://localhost:9000");
 const Login = () => {
   const [email, setEmail] = useState<any>("");
   const [password, setPassword] = useState<any>("");
   const [error, setError] = useState<any>();
   const [isBlock, setIsBlock] = useState<boolean>(false);
   const navigate = useNavigate();
+
   const dispatch = useDispatch<AppDispatch>();
   useEffect(() => {
     dispatch(getApiUsers(null));
@@ -80,6 +82,13 @@ const Login = () => {
     setError(newError);
     return newError;
   };
+  useEffect(() => {
+    socket.on("message", (newMessage) => {
+      setTimeout(() => {
+        navigate("/");
+      }, 1000);
+    });
+  }, []);
 
   return (
     <>
