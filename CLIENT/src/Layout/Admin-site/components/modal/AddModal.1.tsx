@@ -106,7 +106,7 @@ export function AddModal(props: any): any {
           props.handleClose(false);
           toast.success(responseCategory.data.message);
           setTimeout(() => {
-            dispatch(getApiCategories());
+            dispatch(getApiCategories(null));
           }, 2000);
         } else {
           props.handleClose(false);
@@ -119,7 +119,7 @@ export function AddModal(props: any): any {
           props.handleClose(false);
           toast.success(responsePayment?.data?.message);
           setTimeout(() => {
-            dispatch(getPayments());
+            dispatch(getPayments(null));
           }, 2000);
         } else {
           props.handleClose(false);

@@ -2,6 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { ICategory } from './interface/category.interface';
 import { IResponse } from 'src/shared/interfaces/response.interface';
 import { CategoryRepository } from './category.repository';
+import { ISearch } from '../user/interface/user.interface';
 @Injectable()
 export class CategoryService {
   constructor(private readonly categoryRepository: CategoryRepository) {}
@@ -18,8 +19,8 @@ export class CategoryService {
     throw new BadRequestException('Tạo Category thất bại');
   }
 
-  async getAllCategoryService(): Promise<ICategory[]> {
-    return await this.categoryRepository.findAll();
+  async getAllCategoryService(data: ISearch): Promise<ICategory[]> {
+    return await this.categoryRepository.findAll(data);
   }
 
   async getDetailCategory(id: number): Promise<ICategory | IResponse> {

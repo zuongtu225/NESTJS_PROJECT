@@ -13,11 +13,9 @@ const ProductManager = () => {
   const dispatch = useDispatch<AppDispatch>();
   const [data, setData] = useState<IProduct[]>();
   const product = useSelector((state: any) => state?.productReducer?.products);
-
   const handlePage = (pagination: any) => {
     setData(pagination);
   };
-
   const handleStatus = async (status: any, id: number) => {
     const newStatus = +status === 1 ? true : false;
     const response: any = await updateStatusProduct(newStatus, id);

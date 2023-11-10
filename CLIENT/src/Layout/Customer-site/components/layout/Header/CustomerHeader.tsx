@@ -16,6 +16,7 @@ import {
   getDetailUser,
 } from "../../../../../store/action";
 import { IProduct } from "../../../../../Interface";
+import { Avatar, Dropdown } from "flowbite-react";
 const CustomerHeader = () => {
   const dispatch = useDispatch<AppDispatch>();
   const nagivate = useNavigate();
@@ -30,7 +31,6 @@ const CustomerHeader = () => {
   const dataProduct = useSelector(
     (state: any) => state?.productReducer?.products
   );
-
   const handleInputClick = (e: any) => {
     if (e.target.value.length > 0) {
       setIsHidden(true);
@@ -73,6 +73,7 @@ const CustomerHeader = () => {
   };
   const productDetail = (id: number) => {
     navigate(`/detail/${id}`);
+    setIsHidden(false);
   };
   return (
     <header id="moveTop">
@@ -153,8 +154,7 @@ const CustomerHeader = () => {
               )}
             </div>
           </div>
-
-          <div className="account ">
+          <div className="account  hide-mobile">
             <div id="loginAccount " className="w-100px">
               {auth !== "" ? (
                 <div className="flex gap-3 items-center">
@@ -190,13 +190,33 @@ const CustomerHeader = () => {
             </div>
           </div>
 
-          <div className="cart">
+          <div className="cart mr-5">
             <p className="hide-mobile hide-tablet">|</p>
             <div className="nationwide-store hide-mobile  hide-tablet"></div>
             <LuStore className=" hide-mobile" />
-
             <RiShoppingCart2Line className="w-8 h-6" onClick={cartPage} />
             {userDetail?.id && <p id="length-cart">{carts?.length}</p>}
+          </div>
+          <div className="hide-laptop">
+            <Dropdown
+              className="w-[200px] "
+              label={<Avatar alt="" img={userDetail?.avatar} rounded={true} />}
+              arrowIcon={false}
+              inline
+            >
+              <Dropdown.Header>
+                <span className="block text-sm">
+                  {userDetail?.email?.slice(0, userDetail?.email.indexOf("@"))}
+                </span>
+              </Dropdown.Header>
+              <Dropdown.Item onClick={profile}>Thông tin</Dropdown.Item>
+              <Dropdown.Item onClick={() => navigate("/history")}>
+                Đơn mua
+              </Dropdown.Item>
+              <Dropdown.Item>Cài đặt</Dropdown.Item>
+              <Dropdown.Divider />
+              <Dropdown.Item onClick={logout}>Đăng xuất</Dropdown.Item>
+            </Dropdown>
           </div>
         </div>
       </div>

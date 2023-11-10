@@ -16,7 +16,6 @@ import {
 import { LoginDto, RegisterDto } from './dto/authen.dto';
 import { IResponseAuth } from './interface/authen.response';
 import { AuthGuard } from '@nestjs/passport';
-import { User } from '../user/entities/user.entity';
 dotenv.config();
 const init = process.env.API_URL;
 
@@ -35,19 +34,15 @@ export class AuthenController {
   }
   @Get('/google')
   @UseGuards(AuthGuard('google'))
-  async googleLogin(@Res() res): Promise<User | unknown | any> {
-    // return await this.authenService.getGoogleLoginUrl(res);
-  }
+  async googleAuth(@Req() req) {}
 
-  @Get('/google/callback')
+  @Get('/google/redirect')
   @UseGuards(AuthGuard('google'))
-  async googleRedirect(@Req() req, @Res() res): Promise<User | unknown | any> {
-    return await this.authenService.googleLogin(req, res);
-  }
-
-  @Get('/google/user-data')
-  @UseGuards(AuthGuard('jwt'))
-  googleSuccess(@Req() req, @Res() res) {
-    res.json('Success');
+  async googleAuthRedirect(@Req() req, @Res() res) {
+    const response = await this.authenService.loginGoogleService(req);
+    if (response && response.accessToken) {
+      const token = response.accessToken;
+      return res.redirect(`http://localhost:3000/verifyGoogle/${token}/v1`);
+    }
   }
 }

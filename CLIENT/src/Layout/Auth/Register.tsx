@@ -29,9 +29,8 @@ const Register = () => {
     const newUser = {
       email: email,
       password: password,
-      refreshToken: "",
       avatar:
-        "https://inkythuatso.com/uploads/thumbnails/800/2023/03/8-anh-dai-dien-trang-inkythuatso-03-15-26-54.jpg",
+        "https://bathanh.com.vn/wp-content/uploads/2017/08/default_avatar.png",
       firstName: "",
       lastName: "",
       role: data?.length === 0 ? 1 : 2,

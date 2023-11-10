@@ -1,15 +1,22 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import AdminHeader from "../../components/layout/Header";
-import AdminPagination from "../../components/table/AdminPagination";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../../../store";
 import { getApiUsers, getDetailUser } from "../../../../store/action";
-import { updateStatusUser, updateUser } from "../../../../Api";
+import { updateStatusUser } from "../../../../Api";
 import { ToastContainer, toast } from "react-toastify";
+import Pagination from "../../components/pagination";
+import { IUser } from "../../../../Interface";
 
 const UsersManager = () => {
   const dispatch = useDispatch<AppDispatch>();
   const users = useSelector((state: any) => state?.userReducer?.users);
+  const [data, setData] = useState<IUser[]>();
+
+  const handlePage = (pagination: any) => {
+    setData(pagination);
+  };
+
   useEffect(() => {
     dispatch(getApiUsers(null));
   }, []);
@@ -61,7 +68,7 @@ const UsersManager = () => {
               </tr>
             </thead>
             <tbody>
-              {users?.map((item: any, index: number) => {
+              {data?.map((item: any, index: number) => {
                 return (
                   <tr>
                     <th
@@ -118,11 +125,9 @@ const UsersManager = () => {
             </tbody>
           </table>
 
-          {/* phân trang */}
           <div className="p-4">
-            <AdminPagination />
+            <Pagination data={users} handlePage={handlePage} />
           </div>
-          {/* phân trang */}
         </div>
       </div>
     </div>

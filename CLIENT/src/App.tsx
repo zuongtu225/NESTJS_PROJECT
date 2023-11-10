@@ -1,4 +1,3 @@
-import React from "react";
 import { Route, Routes } from "react-router-dom";
 import ProductManager from "./Layout/Admin-site/pages/ProductManager";
 import Home from "./Layout/Customer-site/pages/home";
@@ -15,13 +14,12 @@ import PageNotFound from "./Layout/NotFound/PageNotFound";
 import DashBoard from "./Layout/Admin-site/pages/DashBoard";
 import CategoryManager from "./Layout/Admin-site/pages/Category";
 import BrandsManager from "./Layout/Admin-site/pages/Brands";
-import VoucherManager from "./Layout/Admin-site/pages/Voucher";
-import BlogManager from "./Layout/Admin-site/pages/Blogs";
 import PaymentManager from "./Layout/Admin-site/pages/Payments";
 import MaleProducts from "./Layout/Customer-site/pages/products/MaleProducts";
 import Checkout from "./Layout/Customer-site/pages/checkout";
 import Profile from "./Layout/Customer-site/pages/profile";
 import HistoryOrders from "./Layout/Customer-site/pages/history_order";
+import VerifyLogin from "./Layout/Auth/verify-google";
 
 function App() {
   return (
@@ -29,6 +27,7 @@ function App() {
       {/* auth */}
       <Route path="/auth/login" element={<Login />}></Route>
       <Route path="/auth/register" element={<Register />}></Route>
+      <Route path="/verifyGoogle/:token/v1" element={<VerifyLogin />} />
       <Route path="/profile" element={<Profile />}></Route>
       {/* customer */}
       <Route path="/" element={<CustomerExtend />}>
@@ -48,8 +47,6 @@ function App() {
         <Route path="user" element={<UsersManager />}></Route>
         <Route path="category" element={<CategoryManager />}></Route>
         <Route path="brand" element={<BrandsManager />}></Route>
-        <Route path="voucher" element={<VoucherManager />}></Route>
-        <Route path="blog" element={<BlogManager />}></Route>
         <Route path="payment" element={<PaymentManager />}></Route>
       </Route>
       <Route path="*" element={<PageNotFound />}></Route>

@@ -3,7 +3,7 @@ import { IPayment } from './interface/payment.interface';
 import { IResponse } from 'src/shared/interfaces/response.interface';
 import { PaymentRepository } from './payment.repository';
 import { Payment } from './entities/payment.entity';
-import { IUser } from '../user/interface/user.interface';
+import { ISearch, IUser } from '../user/interface/user.interface';
 @Injectable()
 export class PaymentService {
   constructor(private readonly paymentRepository: PaymentRepository) {}
@@ -18,8 +18,8 @@ export class PaymentService {
     }
     throw new BadRequestException('Tạo Payment thất bại');
   }
-  async getAllPaymentService(): Promise<Payment[]> {
-    return await this.paymentRepository.findAll();
+  async getAllPaymentService(data: ISearch): Promise<Payment[]> {
+    return await this.paymentRepository.findAll(data);
   }
   async getDetailPaymentService(id: number): Promise<Payment> {
     return await this.paymentRepository.findDetail(id);

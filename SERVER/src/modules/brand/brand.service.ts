@@ -2,6 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { IBrand } from './interface/brand.interface';
 import { IResponse } from 'src/shared/interfaces/response.interface';
 import { BrandRepository } from './brand.repository';
+import { ISearch } from '../user/interface/user.interface';
 @Injectable()
 export class BrandService {
   constructor(private readonly brandRepository: BrandRepository) {}
@@ -16,8 +17,8 @@ export class BrandService {
     }
     throw new BadRequestException('Tạo Brand thất bại');
   }
-  async getAllBrandService(): Promise<IBrand[]> {
-    return await this.brandRepository.findAll();
+  async getAllBrandService(data: ISearch): Promise<IBrand[]> {
+    return await this.brandRepository.findAll(data);
   }
   async getDetailBrand(id: number): Promise<IBrand | IResponse> {
     const response = await this.brandRepository.findOne(id);

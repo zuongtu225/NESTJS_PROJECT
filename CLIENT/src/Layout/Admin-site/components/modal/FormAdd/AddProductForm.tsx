@@ -37,7 +37,7 @@ const AddProductForm = (props: any) => {
     }
   };
   useEffect(() => {
-    dispatch(getApiCategories());
+    dispatch(getApiCategories(null));
     dispatch(getApiBrands(null));
     dispatch(getApiSizes());
   }, []);

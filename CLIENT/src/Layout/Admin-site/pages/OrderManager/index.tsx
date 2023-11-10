@@ -10,11 +10,19 @@ import { AppDispatch } from "../../../../store";
 import { ToastContainer, toast } from "react-toastify";
 import { updateOrderApi } from "../../../../Api/order";
 import { OrderDetailModal } from "./orderDetailForm";
+import { IUser } from "../../../../Interface";
+import Pagination from "../../components/pagination";
+
 const OrderManager = () => {
   const dispatch = useDispatch<AppDispatch>();
   const [statusOder, getStatusOrder] = useState<string>("Pending");
   const [code, setCodeOrder] = useState<number>();
   const orderApi = useSelector((state: any) => state?.orderReducer?.orders);
+  const [data, setData] = useState<IUser[]>();
+
+  const handlePage = (pagination: any) => {
+    setData(pagination);
+  };
   const [open, setOpen] = useState<boolean>(false);
   const handleClose = (open: boolean) => {
     setOpen(open);
@@ -134,7 +142,7 @@ const OrderManager = () => {
             </thead>
             <tbody>
               <OrderDetailModal open={open} handleClose={handleClose} />
-              {orderApi?.map((item: any, index: number) => {
+              {data?.map((item: any, index: number) => {
                 return (
                   <tr key={item.id} className="p-10">
                     <td className="w-4 p-4">{index + 1}</td>
@@ -198,6 +206,9 @@ const OrderManager = () => {
               })}
             </tbody>
           </table>
+          <div className="p-4">
+            <Pagination data={orderApi} handlePage={handlePage} />
+          </div>
         </div>
       </div>
     </div>

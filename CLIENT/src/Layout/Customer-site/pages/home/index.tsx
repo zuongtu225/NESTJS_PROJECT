@@ -110,7 +110,7 @@ const Home = () => {
                   </p>
                   {userDetail?.id ? (
                     <BsCartPlus
-                      className="w-5 h-5"
+                      className="w-5 h-5 "
                       onClick={() => productDetail(item.id)}
                     />
                   ) : (

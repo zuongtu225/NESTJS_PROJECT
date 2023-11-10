@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import Tabs from "../../components/layout/Tabs";
-import AdminPagination from "../../components/table/AdminPagination";
 import AdminHeader from "../../components/layout/Header";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../../../store";
@@ -10,17 +9,22 @@ import { ToastContainer, toast } from "react-toastify";
 import { deleteCategory } from "../../../../Api/categories";
 import { EditModal } from "../../components/modal/EditModal";
 import { Button } from "flowbite-react";
+import Pagination from "../../components/pagination";
 
 const CategoryManager = () => {
   const dispatch = useDispatch<AppDispatch>();
+  const [data, setData] = useState<ICategory[]>();
   const categories = useSelector(
     (state: any) => state?.categoryReducer?.categories
   );
+  const handlePage = (pagination: any) => {
+    setData(pagination);
+  };
   const removeCategory = async (id: number) => {
     const response = await deleteCategory(id);
     if (response) {
       toast.success("Xóa thành công");
-      dispatch(getApiCategories());
+      dispatch(getApiCategories(null));
     } else {
       toast.error("Phải xóa các sản phẩm đã tạo bởi Loại này trước");
     }
@@ -34,7 +38,7 @@ const CategoryManager = () => {
     setOpen(!open);
   };
   useEffect(() => {
-    dispatch(getApiCategories());
+    dispatch(getApiCategories(null));
   }, []);
   return (
     <div>
@@ -57,7 +61,7 @@ const CategoryManager = () => {
               </tr>
             </thead>
             <tbody>
-              {categories?.map((item: ICategory, index: number) => {
+              {data?.map((item: ICategory, index: number) => {
                 return (
                   <tr className="p-10">
                     <td
@@ -92,6 +96,7 @@ const CategoryManager = () => {
               })}
             </tbody>
           </table>
+          <Pagination data={categories} handlePage={handlePage} />
         </div>
       </div>
     </div>

@@ -11,7 +11,7 @@ export const createProduct = (newProduct: IProduct) => {
       console.error("Error!!!!", error);
     });
 };
-export const createProductSize = (data: IProductSize) => {
+export const createProductSize = (data: any) => {
   return BaseAxios.post(`http://localhost:9000/api/v1/productSizes`, data)
     .then((response) => {
       return response;

@@ -73,7 +73,7 @@ export function EditModal(props: any) {
           toast.success(responseCategory?.data?.message);
           props.handleClose(false);
           setTimeout(() => {
-            dispatch(getApiCategories());
+            dispatch(getApiCategories(null));
           }, 2000);
         } else {
           props.handleClose(false);
@@ -86,7 +86,7 @@ export function EditModal(props: any) {
           toast.success(responsePayment?.data?.message);
           props.handleClose(false);
           setTimeout(() => {
-            dispatch(getPayments());
+            dispatch(getPayments(null));
           }, 2000);
         } else {
           props.handleClose(false);

@@ -7,7 +7,6 @@ import { AuthenRepository } from './authen.repository';
 import { JwtModule } from '@nestjs/jwt';
 import * as dotenv from 'dotenv';
 import { PassportModule } from '@nestjs/passport';
-import { GoogleStrategy } from './google.strategy';
 dotenv.config();
 @Module({
   imports: [
@@ -20,7 +19,7 @@ dotenv.config();
     PassportModule.register({ defaultStrategy: 'google' }),
   ],
   controllers: [AuthenController],
-  providers: [AuthenService, AuthenRepository, GoogleStrategy],
+  providers: [AuthenService, AuthenRepository],
   exports: [AuthenService, PassportModule],
 })
 export class AuthenModule {}

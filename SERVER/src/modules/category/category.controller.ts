@@ -13,10 +13,12 @@ import {
   Post,
   Delete,
   UseGuards,
+  Query,
 } from '@nestjs/common';
 import { IResponse } from 'src/shared/interfaces/response.interface';
 import { AuthenGuard } from 'src/shared/guards/authen.guard';
 import { AuthorGuard } from 'src/shared/guards/author.guard';
+import { ISearch } from '../user/interface/user.interface';
 
 dotenv.config();
 const init = process.env.API_URL;
@@ -33,10 +35,9 @@ export class CategoryController {
     return await this.categoryService.createCategoryService(body);
   }
   @Get()
-  async getAllCategorys(): Promise<ICategory[]> {
-    return await this.categoryService.getAllCategoryService();
+  async getAllCategorys(@Query() data: ISearch): Promise<ICategory[]> {
+    return await this.categoryService.getAllCategoryService(data);
   }
-
   @Get('/:id')
   async getDetailCategory(
     @Param('id') id: number,

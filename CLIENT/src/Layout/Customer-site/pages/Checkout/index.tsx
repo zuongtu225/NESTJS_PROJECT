@@ -15,9 +15,11 @@ import { BiUser } from "react-icons/bi";
 import { IProduct } from "../../../../Interface";
 import { createOrder } from "../../../../Api/order";
 import { ToastContainer, toast } from "react-toastify";
-import { deleteCart, updateProduct, updateUser } from "../../../../Api";
+import { deleteCart, updateProduct } from "../../../../Api";
 import { createOrderItem } from "../../../../Api/orderItem";
 import { createAddress } from "../../../../Api/address";
+import { io } from "socket.io-client";
+const socket = io("http://localhost:9000");
 const Checkout = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
@@ -161,6 +163,7 @@ const Checkout = () => {
         toast.success(resOrder.data.message);
         await deleteCart();
         await dispatch(getCartByUser());
+        socket.emit("message", " Bạn có đơn hàng mới");
         setTimeout(() => {
           navigate("/");
         }, 1500);
@@ -201,7 +204,6 @@ const Checkout = () => {
         wallet: userDetail.cardVisa.wallet - userDetail.sum,
       },
     };
-    await updateUser(updateUserInfo); // cập nhật lại user api
     // dispatch(getDetailUser(userDetail.id));
     // for (const bank of banks) {
     //   if (bank.code === userDetail.cardVisa.code) {

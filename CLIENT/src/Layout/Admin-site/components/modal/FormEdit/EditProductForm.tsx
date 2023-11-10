@@ -5,7 +5,6 @@ import { AppDispatch } from "../../../../../store";
 import {
   getApiBrands,
   getApiCategories,
-  getApiProducts,
   getApiSizes,
   getDetailProduct,
 } from "../../../../../store/action";
@@ -19,6 +18,8 @@ const EditProductForm = (props: any) => {
   const categories = useSelector(
     (state: any) => state?.categoryReducer?.categories
   );
+  const sizes = useSelector((state: any) => state?.sizeReducer?.sizes);
+
   const brands = useSelector((state: any) => state?.brandReducer?.brands);
   const [newProduct, setNewProduct] = useState<any>({
     id: productDetail.id,
@@ -48,9 +49,8 @@ const EditProductForm = (props: any) => {
     };
     setNewProduct(product);
   };
-
   useEffect(() => {
-    dispatch(getApiCategories());
+    dispatch(getApiCategories(null));
     dispatch(getApiBrands(null));
     dispatch(getApiSizes());
   }, []);
@@ -109,6 +109,7 @@ const EditProductForm = (props: any) => {
           <div className="md:w-[20%] px-3 ">
             <div className="relative ">
               <label>Dung tích:</label>
+              {/* size */}
               {productDetail?.productSizes?.map((item: any) => {
                 const size = item.sizeId.size.slice(14);
                 return (
@@ -170,7 +171,6 @@ const EditProductForm = (props: any) => {
           </div>
         </div>
         <div className="w-[100%]">
-          {/* image  */}
           {productDetail?.images?.map((item: any, index: number) => {
             return (
               <div

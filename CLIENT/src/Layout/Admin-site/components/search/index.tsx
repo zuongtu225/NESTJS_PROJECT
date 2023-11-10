@@ -5,13 +5,15 @@ import { useDispatch } from "react-redux";
 import { Search } from "../../../../Interface";
 import {
   getApiBrands,
+  getApiCategories,
   getApiProducts,
   getApiUsers,
+  getPayments,
 } from "../../../../store/action";
 
 const SearchComponent: React.FC<Search> = (props) => {
   const dispatch = useDispatch<AppDispatch>();
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState<string>("");
   useEffect(() => {
     switch (props.slug) {
       case "PRODUCTS":
@@ -23,14 +25,17 @@ const SearchComponent: React.FC<Search> = (props) => {
       case "BRANDS":
         dispatch(getApiBrands({ data: value }));
         break;
+      case "CATEGORY":
+        dispatch(getApiCategories({ data: value }));
+        break;
+      case "PAYMENTS":
+        dispatch(getPayments({ data: value }));
+        break;
+
       default:
         break;
     }
   }, [value]);
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(e.target.value);
-  };
 
   return (
     <div className="w-full md:w-100">
@@ -38,7 +43,7 @@ const SearchComponent: React.FC<Search> = (props) => {
         label="Search"
         value={value}
         crossOrigin={undefined}
-        onChange={handleChange}
+        onChange={(e) => setValue(e.target.value)}
       />
     </div>
   );

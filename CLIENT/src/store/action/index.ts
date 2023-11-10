@@ -15,11 +15,14 @@ export const getApiProducts = createAsyncThunk<IProduct, any>(
     return response.data;
   }
 );
-export const getApiCategories = createAsyncThunk<any>(
+export const getApiCategories = createAsyncThunk<any, any>(
   "categories",
-  async () => {
+  async (data: IParams) => {
     const response = await BaseAxios.get(
-      "http://localhost:9000/api/v1/categories"
+      "http://localhost:9000/api/v1/categories",
+      {
+        params: data,
+      }
     );
     return response.data;
   }
@@ -136,10 +139,18 @@ export const getHistoryOrderByUser = createAsyncThunk<any, any>(
     return response.data;
   }
 );
-export const getPayments = createAsyncThunk<any>("getPayments", async () => {
-  const response = await BaseAxios.get("http://localhost:9000/api/v1/payments");
-  return response.data;
-});
+export const getPayments = createAsyncThunk<any, any>(
+  "getPayments",
+  async (data: IParams) => {
+    const response = await BaseAxios.get(
+      "http://localhost:9000/api/v1/payments",
+      {
+        params: data,
+      }
+    );
+    return response.data;
+  }
+);
 export const getDetailPayment = createAsyncThunk<any, any>(
   "getDetailPayment",
   async (id: number) => {

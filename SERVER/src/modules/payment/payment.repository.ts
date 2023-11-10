@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeleteResult, Repository, UpdateResult } from 'typeorm';
+import { DeleteResult, ILike, Repository, UpdateResult } from 'typeorm';
 import { IPayment } from './interface/payment.interface';
 import { Payment } from './entities/payment.entity';
+import { ISearch } from '../user/interface/user.interface';
 @Injectable()
 export class PaymentRepository {
   constructor(
@@ -12,8 +13,10 @@ export class PaymentRepository {
   async create(body: IPayment): Promise<Payment> {
     return await this.paymentRepository.save(body);
   }
-  async findAll(): Promise<Payment[]> {
-    return await this.paymentRepository.find();
+  async findAll(data: ISearch): Promise<Payment[]> {
+    return await this.paymentRepository.find({
+      where: data.data && { title: ILike(`%${data.data}%`) },
+    });
   }
   async findDetail(id: number): Promise<Payment> {
     return await this.paymentRepository.findOneBy({ id });

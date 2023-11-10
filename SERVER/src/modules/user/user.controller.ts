@@ -10,7 +10,6 @@ import {
   Param,
   ClassSerializerInterceptor,
   UseInterceptors,
-  Request,
   UseGuards,
   UploadedFile,
   Query,
@@ -47,22 +46,24 @@ export class UserController {
   async getDetailUser(@Param('id') id: number): Promise<IUser | IResponse> {
     return await this.userService.getDetailUser(id);
   }
-  @Put('/update')
-  async updateUser(@CurrentUser() user, @Body() body): Promise<any> {
-    return await this.userService.updateUserService(user.id, body);
-  }
   @Put('/update-avatar')
   @UseGuards(AuthenGuard)
   @UseInterceptors(FileInterceptor('avatar'))
   async updateAvatarUser(
-    @Request() req,
+    @CurrentUser() user,
     @UploadedFile() file: Express.Multer.File,
   ): Promise<any> {
     const response = await this.cloudinaryService.uploadSingleFile(file);
-    return await this.userService.updateUserService(req.user.id, {
+    return await this.userService.updateUserService(user.id, {
       avatar: response.url,
     });
   }
+  @Put('/update')
+  @UseGuards(AuthenGuard)
+  async updateUser(@CurrentUser() user, @Body() body): Promise<any> {
+    return await this.userService.updateUserService(user.id, body);
+  }
+
   @Put('/:id')
   @UseGuards(AuthorGuard)
   @UseGuards(AuthenGuard)

@@ -41,7 +41,7 @@ export class AuthenService {
     return this.authenRepository.login(body);
   }
 
-  async googleLogin(req, res) {
-    return { data: res.user };
+  async loginGoogleService(req: any) {
+    return await this.authenRepository.loginGoogleRepository(req.user);
   }
 }

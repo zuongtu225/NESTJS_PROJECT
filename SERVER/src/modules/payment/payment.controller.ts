@@ -12,13 +12,14 @@ import {
   Put,
   Param,
   Delete,
+  Query,
   Get,
 } from '@nestjs/common';
 import { IResponse } from 'src/shared/interfaces/response.interface';
 import { AuthenGuard } from 'src/shared/guards/authen.guard';
-import { CurrentUser } from '../user/decorator/currentUser.decorator';
 import { Payment } from './entities/payment.entity';
 import { AuthorGuard } from 'src/shared/guards/author.guard';
+import { ISearch } from '../user/interface/user.interface';
 
 dotenv.config();
 const init = process.env.API_URL;
@@ -34,8 +35,8 @@ export class PaymentController {
     return await this.paymentService.createPaymentService(body);
   }
   @Get()
-  async getAllPayment(): Promise<IPayment[]> {
-    return await this.paymentService.getAllPaymentService();
+  async getAllPayment(@Query() data: ISearch): Promise<IPayment[]> {
+    return await this.paymentService.getAllPaymentService(data);
   }
   @Get('/:id')
   async getDetailPayment(@Param('id') id: number): Promise<IPayment> {

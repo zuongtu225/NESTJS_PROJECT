@@ -13,13 +13,14 @@ import {
   UseGuards,
   Post,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { IResponse } from 'src/shared/interfaces/response.interface';
 import { AuthenGuard } from 'src/shared/guards/authen.guard';
 import { AuthorGuard } from 'src/shared/guards/author.guard';
+import { ISearch } from '../user/interface/user.interface';
 dotenv.config();
 const init = process.env.API_URL;
-
 @Controller(`${init}/brands`)
 @UseInterceptors(ClassSerializerInterceptor)
 @UseInterceptors(LoggingInterceptor)
@@ -30,12 +31,10 @@ export class BrandController {
   async createBrand(@Body() body: IBrand): Promise<IResponse> {
     return await this.brandService.createBrandService(body);
   }
-
   @Get()
-  async getAllBrands(): Promise<IBrand[]> {
-    return await this.brandService.getAllBrandService();
+  async getAllBrands(@Query() data: ISearch): Promise<IBrand[]> {
+    return await this.brandService.getAllBrandService(data);
   }
-
   @Get('/:id')
   async getDetailBrand(@Param('id') id: number): Promise<IBrand | IResponse> {
     return await this.brandService.getDetailBrand(id);

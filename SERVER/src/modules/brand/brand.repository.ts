@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeleteResult, Repository, UpdateResult } from 'typeorm';
+import { DeleteResult, ILike, Repository, UpdateResult } from 'typeorm';
 import { IBrand } from './interface/brand.interface';
 import { Brand } from './entities/brand.entity';
+import { ISearch } from '../user/interface/user.interface';
 @Injectable()
 export class BrandRepository {
   constructor(
@@ -12,9 +13,10 @@ export class BrandRepository {
   async create(body: IBrand): Promise<IBrand> {
     return await this.brandRepository.save(body);
   }
-  async findAll(): Promise<IBrand[]> {
-    const response = await this.brandRepository.find();
-    return response;
+  async findAll(data: ISearch): Promise<IBrand[]> {
+    return await this.brandRepository.find({
+      where: data.data && { title: ILike(`%${data.data}%`) },
+    });
   }
   async findOne(id: number): Promise<IBrand> {
     const response = await this.brandRepository.findOneBy({ id });

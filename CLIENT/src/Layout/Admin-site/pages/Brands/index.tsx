@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import Tabs from "../../components/layout/Tabs";
-import AdminPagination from "../../components/table/AdminPagination";
 import AdminHeader from "../../components/layout/Header";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../../../store";
@@ -10,11 +9,15 @@ import { ToastContainer, toast } from "react-toastify";
 import { deleteBrand } from "../../../../Api/brands";
 import { EditModal } from "../../components/modal/EditModal";
 import { Button } from "flowbite-react";
+import Pagination from "../../components/pagination";
 
 const BrandsManager = () => {
   const dispatch = useDispatch<AppDispatch>();
   const brands = useSelector((state: any) => state?.brandReducer?.brands);
-
+  const [data, setData] = useState<IBrand[]>();
+  const handlePage = (pagination: any) => {
+    setData(pagination);
+  };
   const [open, setOpen] = useState<boolean>(false);
   const handleClose = (open: boolean) => {
     setOpen(open);
@@ -58,7 +61,7 @@ const BrandsManager = () => {
               </tr>
             </thead>
             <tbody>
-              {brands?.map((item: IBrand, index: number) => {
+              {data?.map((item: IBrand, index: number) => {
                 return (
                   <tr className="p-10">
                     <td
@@ -93,6 +96,7 @@ const BrandsManager = () => {
               })}
             </tbody>
           </table>
+          <Pagination data={brands} handlePage={handlePage} />
         </div>
       </div>
     </div>

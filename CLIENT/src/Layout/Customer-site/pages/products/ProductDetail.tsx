@@ -12,7 +12,6 @@ import { BiSolidStar } from "react-icons/bi";
 import { FaStarHalfAlt } from "react-icons/fa";
 import { ToastContainer, toast } from "react-toastify";
 import { createCart } from "../../../../Api";
-import { IProduct } from "../../../../Interface";
 const ProductsDetail = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
@@ -231,6 +230,40 @@ const ProductsDetail = () => {
           ) : (
             <p>Bạn chưa đăng nhập ko thể mua</p>
           )}
+        </div>
+      </div>
+      {/* detail */}
+      <div className="detail-product container">
+        <div className="product-atribute">
+          <ul>
+            <li>
+              <span>Mã hàng </span>
+              <p>110103030202</p>
+            </li>
+            <li>
+              <span>Thương hiệu</span>
+              <p>{productDetail?.brand?.title}</p>
+            </li>
+            <li>
+              <span>Xuất xứ </span>
+              <p>Pháp</p>
+            </li>
+            <li>
+              <span>Năm phát hành </span>
+              <p>2023</p>
+            </li>
+            <li>
+              <span>Nhóm hương</span>
+              <p>Xạ Hương, Quảng Hoắc Hương, Hoa Sứ, Hoa Nhài</p>
+            </li>
+            <li>
+              <span>Phong cách </span>
+              <p>Thanh lịch, Cuốn hút, Sang trọng</p>
+            </li>
+          </ul>
+          <div className="content-detail-more">
+            <p>{productDetail?.description}</p>
+          </div>
         </div>
       </div>
     </main>

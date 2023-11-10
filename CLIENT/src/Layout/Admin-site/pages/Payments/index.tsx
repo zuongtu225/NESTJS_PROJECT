@@ -16,7 +16,7 @@ const PaymentManager = () => {
     const response = await deletePayment(id);
     if (response) {
       toast.success("Xóa thành công");
-      dispatch(getPayments());
+      dispatch(getPayments(null));
     } else {
       toast.error("Phải xóa các sản phẩm đã tạo bởi Loại này trước");
     }
@@ -30,7 +30,7 @@ const PaymentManager = () => {
     setOpen(!open);
   };
   useEffect(() => {
-    dispatch(getPayments());
+    dispatch(getPayments(null));
   }, []);
   return (
     <div>

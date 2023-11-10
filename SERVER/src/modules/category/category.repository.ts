@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeleteResult, Repository, UpdateResult } from 'typeorm';
+import { DeleteResult, ILike, Repository, UpdateResult } from 'typeorm';
 import { Category } from './entities/category.entity';
 import { ICategory } from './interface/category.interface';
+import { ISearch } from '../user/interface/user.interface';
 @Injectable()
 export class CategoryRepository {
   constructor(
@@ -12,8 +13,10 @@ export class CategoryRepository {
   async create(body: ICategory): Promise<ICategory> {
     return await this.categoryRepository.save(body);
   }
-  async findAll(): Promise<ICategory[]> {
-    return await this.categoryRepository.find();
+  async findAll(data: ISearch): Promise<ICategory[]> {
+    return await this.categoryRepository.find({
+      where: data.data && { title: ILike(`%${data.data}%`) },
+    });
   }
   async findOne(id: number): Promise<ICategory> {
     return await this.categoryRepository.findOneBy({ id });
