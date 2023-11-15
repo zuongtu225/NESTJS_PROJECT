@@ -8,6 +8,9 @@
   .hide-laptop{
     display: none;
   }
+  .btnGoogle:hover{
+    background: black;
+  }
   .mega-menu ul {
     padding: 0 5%;
     display: flex;
@@ -369,7 +372,8 @@
       left: 0;
       position: absolute;
       width: 100%;  
-      height: 420px;
+      height: auto;
+      max-height: 420px;
       overflow: hidden;
       background-color: #ffffff;
     }
@@ -411,26 +415,7 @@
       font-weight: bold;
       font-size: 11px;
     }
-  .size-ml {
-    cursor: pointer;
-    font-size: 10px;
-    border-radius: 4px;
-    gap: 5px;
-    padding: 2px 4px;
-    align-items: center;
-    border: 2px solid rgb(183, 181, 181);
-    display: flex;
-    transition: 2s;
-  }
-  
-  .size-ml:hover {
-    border: 2px solid rgb(255, 64, 64);
-  }
-
-  .size-ml img {
-    width: 25px;
-    height: 25px;
-  }
+ 
   .card-content {
     padding: 0 30px;
   }
@@ -505,9 +490,9 @@
   }
   .quantity input {
     cursor: pointer;
-    padding: 0 0 0 4px;
+    padding: 0 0 0 10px;
     border-radius: 3px;
-    width: 40px;
+    width: 100px;
     height: 22px;
     border: 1px solid rgb(214, 214, 214);
     outline: none;
@@ -1054,11 +1039,12 @@
   .all-brands {
     overflow-y: auto;
     padding-top: 5px;
-    padding-left: 10px;
     background-color: #fff;
-    height: 230px;
     border: 1px solid rgb(224, 224, 224);
   }
+  .brand-left{
+  border-bottom: 1px solid rgb(246, 244, 244);
+   }
   .site-breakcrumb {
     padding: 15px 0 10px 0;
     font-size: 12px;
@@ -1233,7 +1219,7 @@
   }
   .cart-heading h2 {
     background-color: #fff;
-    padding: 10px 40px;
+    padding: 5px 40px;
   }
   .cart-item-flex {
     background-color: #fff;
@@ -1265,7 +1251,7 @@
   }
   .item-img-info {
     display: flex;
-    gap: 20px;
+    gap: 10px;
     align-items: center;
   }
   .quantity-parent {
@@ -1331,9 +1317,6 @@
     display: flex;
     justify-content: space-between;
   }
-  #price-after {
-    color: red;
-  }
   .price {
     font-weight: bold;
     color: red;
@@ -1364,7 +1347,7 @@
   }
   .homeIndex {
     cursor: pointer;
-    padding: 10px 0 0 0;
+    padding: 5px 40px; 
     display: flex;
     justify-content: space-between;
   }
@@ -1422,9 +1405,6 @@
   .cart-pay-wrapper {
     padding-bottom: 16%;
     gap: 20px;
-  }
-  .detail-product-order .name {
-    width: 150px;
   }
   /* ______footer_______ */
   footer {
@@ -1922,6 +1902,7 @@
     overflow: hidden;
     height: 212px;
   }
+
   .buy-now-container button {
     transition: 0.4s;
     padding: 4px 10px;
@@ -1975,6 +1956,7 @@
        padding: 1px 9px 5px 4px;
        border-radius: 50%;
        background-color: red;
+       
        position: absolute;
        color: white;
      }
@@ -1984,6 +1966,7 @@
     position: relative;
     display: block;
   }
+
   .home-block img {
     height: 100%;
     width: 100%;

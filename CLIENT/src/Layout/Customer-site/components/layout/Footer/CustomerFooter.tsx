@@ -2,7 +2,7 @@ import React from "react";
 import { AiOutlineInstagram, AiOutlineYoutube } from "react-icons/ai";
 import { FiFacebook } from "react-icons/fi";
 import { BiHomeSmile } from "react-icons/bi";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 const CustomerFooter = () => {
   return (
     <>

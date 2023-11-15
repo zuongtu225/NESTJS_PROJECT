@@ -16,9 +16,7 @@ const Home = () => {
   const dataProduct = useSelector(
     (state: any) => state?.productReducer?.products
   );
-  const dataNewArrival = dataProduct?.filter(
-    (item: IProduct) => item.isBestSeller == false
-  );
+  const dataNewArrival = dataProduct?.slice(0, 10);
   const bestSeller = dataProduct?.filter(
     (item: IProduct) => item.isBestSeller == true
   );
@@ -129,11 +127,8 @@ const Home = () => {
             src="https://theme.hstatic.net/1000340570/1000964732/14/banner-nu-desk.jpg?v=2850"
             alt=""
           />
-          <NavLink
-            className="absolute bottom-3 right-8 text-white "
-            to={"/male"}
-          >
-            <h1 className="flex items-center gap-2">
+          <NavLink className="absolute right-8 text-white " to={"/male"}>
+            <h1 className="flex items-center pl-[170px]  gap-2">
               NƯỚC HOA NAM <GoArrowRight />
             </h1>
           </NavLink>
@@ -143,11 +138,8 @@ const Home = () => {
             src="https://theme.hstatic.net/1000340570/1000964732/14/banner-nam-desk.jpg?v=2850"
             alt=""
           />
-          <NavLink
-            className="absolute bottom-3 right-8 text-white "
-            to={"/female"}
-          >
-            <h1 className="flex items-center gap-2">
+          <NavLink className="absolute right-8 text-white " to={"/female"}>
+            <h1 className="flex items-center pl-[170px]  gap-2">
               NƯỚC HOA NỮ <GoArrowRight />
             </h1>
           </NavLink>
@@ -157,11 +149,8 @@ const Home = () => {
             src="https://theme.hstatic.net/1000340570/1000964732/14/banner-niche-desk.jpg?v=2850"
             alt=""
           />
-          <NavLink
-            className="absolute bottom-3 right-8 text-white "
-            to={"/niche"}
-          >
-            <h1 className="flex items-center gap-2">
+          <NavLink className="absolute  text-white   " to={"/male"}>
+            <h1 className="flex items-center gap-2 pl-[170px] ">
               NƯỚC HOA NICHE <GoArrowRight />
             </h1>
           </NavLink>

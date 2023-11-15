@@ -27,13 +27,6 @@ export const MenuItem = [
     title: "Thương Hiệu",
     icon: <PiSignatureBold />,
   },
-  {
-    id: 8,
-    path: "/admin/voucher",
-    title: "Voucher",
-    icon: <PiShootingStarBold />,
-  },
-  { id: 9, path: "/admin/blog", title: "Blogs", icon: <PiSlideshowBold /> },
   { id: 10, path: "/admin/payment", title: "Payments", icon: <PiWalletBold /> },
   {
     id: 11,

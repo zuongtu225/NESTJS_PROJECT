@@ -28,6 +28,7 @@ export class AuthenController {
   async register(@Body() body: RegisterDto): Promise<IResponse> {
     return await this.authenService.registerService(body);
   }
+
   @Post('/login')
   async login(@Body() body: LoginDto): Promise<IResponseAuth> {
     return await this.authenService.loginService(body);

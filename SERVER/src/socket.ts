@@ -32,6 +32,14 @@ export class SocketGateway
   ) {
     return this.sendToClient(socket.id, 'message', data);
   }
+  @SubscribeMessage('renderStockProduct')
+  async handleStock(
+    @ConnectedSocket() socket: Socket,
+    @MessageBody() data: any,
+  ) {
+    return this.sendToClient(socket.id, 'renderStockProduct', data);
+  }
+
   sendToClient(clientId: string, event: string, data: any) {
     this.server.emit(event, data);
   }

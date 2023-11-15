@@ -60,32 +60,12 @@ const FemaleProducts = () => {
                     return (
                       <li
                         onClick={() => setId(item.id)}
-                        className="cursor-pointer hover:text-red-500 hover:font-bold"
+                        className="cursor-pointer hover:text-red-500 hover:font-bold brand-left p-20  items-center"
                       >
-                        <input type="checkbox" className="brand-checkbox" />
-                        <label>{item.title}</label>
+                        <label className="ml-5">{item.title}</label>
                       </li>
                     );
                   })}
-                </ul>
-              </div>
-            </div>
-            <div className="left-wrapper">
-              <h4>Dung tích</h4>
-              <div className="all-brands ">
-                <ul className="render-allBrands ">
-                  <li>
-                    <input type="checkbox" className="brand-checkbox" />
-                    <label htmlFor="${item.brand}">100ml</label>
-                  </li>
-                  <li>
-                    <input type="checkbox" className="brand-checkbox" />
-                    <label>200ml</label>
-                  </li>
-                  <li>
-                    <input type="checkbox" className="brand-checkbox" />
-                    <label>300ml</label>
-                  </li>
                 </ul>
               </div>
             </div>
@@ -96,15 +76,6 @@ const FemaleProducts = () => {
                 <p>Nước hoa Nam</p>
                 <p>/</p>
                 <p className="brand-name">Thương hiệu</p>
-              </div>
-              <div className="info-right">
-                <p>Sắp xếp theo:</p>
-                <select>
-                  <option>Bán chạy </option>
-                  <option>Sản phẩm mới</option>
-                  <option>Giá thấp đến cao</option>
-                  <option>Giá cao đến thấp</option>
-                </select>
               </div>
             </div>
             <div className="product-content-main">

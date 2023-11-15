@@ -20,6 +20,7 @@ import Checkout from "./Layout/Customer-site/pages/checkout";
 import Profile from "./Layout/Customer-site/pages/profile";
 import HistoryOrders from "./Layout/Customer-site/pages/history_order";
 import VerifyLogin from "./Layout/Auth/verify-google";
+import { Contact } from "./Layout/Customer-site/pages/contact";
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
       {/* customer */}
       <Route path="/" element={<CustomerExtend />}>
         <Route index element={<Home />}></Route>
+        <Route path="/contact" element={<Contact />}></Route>
         <Route path="cart" element={<CustomerCart />}></Route>
         <Route path="history" element={<HistoryOrders />}></Route>
         <Route path="checkout" element={<Checkout />}></Route>

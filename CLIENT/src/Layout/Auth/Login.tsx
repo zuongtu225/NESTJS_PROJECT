@@ -6,7 +6,7 @@ import { AppDispatch } from "../../store";
 import { getApiUsers } from "../../store/action";
 import { ToastContainer, toast } from "react-toastify";
 import { loginAPI } from "../../Api/auth";
-import ButtonGoogle from "./button-google";
+import ButtonGoogle from "./button-google-login";
 import * as io from "socket.io-client";
 const socket = io.connect("http://localhost:9000");
 const Login = () => {
@@ -40,7 +40,14 @@ const Login = () => {
       if (response.data.data.status === false) {
         setIsBlock(true);
       }
+      if (response.data.accessToken === null) {
+        newError.isError = true;
+        newError.emailMSG = "Mật khẩu không đúng";
+      }
       setError(newError);
+      if (newError.isError === true) {
+        return;
+      }
       if (response.data.success === true) {
         if (
           response.data.data.role.role === 2 &&
@@ -61,6 +68,7 @@ const Login = () => {
           setError(true);
         }
       }
+    } else {
     }
   };
   const validate = (user: any) => {

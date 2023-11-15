@@ -12,6 +12,12 @@ import { Dialog, DialogFooter, DialogHeader } from "@material-tailwind/react";
 import { Button } from "flowbite-react";
 import { updateAvatarUser, updateUser } from "../../../../Api";
 const Profile = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  const userDetail: any = useSelector(
+    (state: any) => state?.userReducer?.userDetail
+  );
+  const [firstName, setFirstName] = useState<string>(userDetail.firstName);
+  const [lastName, setLastName] = useState<string>(userDetail.lastName);
   const [open, setOpen] = useState(false);
   const ClickClose = () => {
     setOpen(false);
@@ -19,12 +25,7 @@ const Profile = () => {
   const openModal = () => {
     setOpen(true);
   };
-  const userDetail: any = useSelector(
-    (state: any) => state?.userReducer?.userDetail
-  );
-  const dispatch = useDispatch<AppDispatch>();
-  const [firstName, setFirstName] = useState<string>(userDetail.firstName);
-  const [lastName, setLastName] = useState<string>(userDetail.lastName);
+
   useEffect(() => {
     dispatch(getDetailUser());
   }, []);

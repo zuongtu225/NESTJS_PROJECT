@@ -22,7 +22,6 @@ const EditProductForm = (props: any) => {
   const listSize = productDetail?.productSizes?.map(
     (item: any) => item.sizeId.id
   );
-  console.log(productDetail?.productSizes);
   const [sizeValue, setSizeValue] = useState<any>(listSize);
   const [error, setError] = useState<boolean>(false);
   const sizes = useSelector((state: any) => state?.sizeReducer?.sizes);
@@ -38,13 +37,11 @@ const EditProductForm = (props: any) => {
       } else {
         setError(true);
       }
-      // await dispatch(getDetailProduct(productDetail.id));
     } else {
       setSizeValue([...sizeValue, id]);
     }
   };
   const brands = useSelector((state: any) => state?.brandReducer?.brands);
-
   const [newProduct, setNewProduct] = useState<any>({
     id: productDetail.id,
     title: productDetail.title,

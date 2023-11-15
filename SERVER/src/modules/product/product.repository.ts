@@ -17,6 +17,9 @@ export class ProductRepository {
   async findAll(data: ISearch): Promise<ProductDto[]> {
     return await this.productRepository.find({
       where: data.data && { title: ILike(`%${data.data}%`) },
+      order: {
+        id: 'DESC',
+      },
     });
   }
   async findOne(id: number): Promise<IProduct> {

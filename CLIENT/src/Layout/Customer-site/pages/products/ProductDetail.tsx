@@ -11,7 +11,7 @@ import {
 import { BiSolidStar } from "react-icons/bi";
 import { FaStarHalfAlt } from "react-icons/fa";
 import { ToastContainer, toast } from "react-toastify";
-import { createCart } from "../../../../Api";
+import { createCart, updateCart } from "../../../../Api";
 const ProductsDetail = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
@@ -26,17 +26,15 @@ const ProductsDetail = () => {
   const productDetail = useSelector(
     (state: any) => state?.productReducer?.productDetail
   );
+
   const productSizes = useSelector(
     (state: any) => state?.productSizeReducer?.productSizes
   );
-
   const productId = Number(id);
   // render
   const newProductSize = productSizes?.filter(
     (item: any) => item.productId.id === productId
   );
-  console.log(newProductSize, "44");
-
   const productSizeId = productSizes?.find(
     (item: any) => item.productId.id === productId && item.sizeId.id === sizeId
   );
@@ -45,24 +43,35 @@ const ProductsDetail = () => {
     if (productSizeId === undefined) {
       return toast.error("Vui lòng chọn size");
     }
+    if (quantity < 1) {
+      return toast.error("Số lượng sản phẩm không thể nhỏ hơn 1");
+    }
+    if (+quantity > productDetail?.stock) {
+      return toast.error("Số lượng trong kho không đủ");
+    }
     const isExistCart = carts.find(
       (item: any) => item.productSizeId.id === productSizeId?.id
     );
     if (isExistCart) {
-      return toast.error("Sản phẩm đã có trong giỏ hàng");
-    }
-    const newCart = {
-      productSizeId: productSizeId?.id,
-      quantity: +quantity,
-    };
-    const resCart: any = await createCart(newCart);
-    if (resCart.data.success === true) {
-      toast.success(resCart.data.message);
-      setTimeout(() => {
-        navigate("/cart");
-      }, 1500);
+      const updateQuantity = isExistCart.quantity + +quantity;
+      const resUpdate: any = await updateCart(isExistCart?.id, {
+        quantity: updateQuantity,
+      });
+      toast.success(resUpdate.data.message);
     } else {
-      toast.error(resCart.data.message);
+      const newCart = {
+        productSizeId: productSizeId?.id,
+        quantity: +quantity,
+      };
+      const resCart: any = await createCart(newCart);
+      if (resCart.data.success === true) {
+        toast.success(resCart.data.message);
+        setTimeout(() => {
+          navigate("/cart");
+        }, 1500);
+      } else {
+        toast.error(resCart.data.message);
+      }
     }
   };
 
@@ -171,13 +180,21 @@ const ProductsDetail = () => {
               <div className="standard-size">
                 {newProductSize?.map((item: any) => {
                   return (
-                    <div
-                      className="size-ml "
+                    <button
                       onClick={() => setSizeID(item.sizeId.id)}
+                      key={item.id}
+                      className={`focus:ring-red-100 dark:focus:ring-red-400 focus:ring-4 focus:outline-none relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-red-200 via-red-300 to-yellow-200 group-hover:from-red-200 group-hover:via-red-300 group-hover:to-yellow-200 dark:text-white dark:hover:text-gray-900 `}
                     >
-                      <img src={item.productId?.images[0]?.url} alt="" />
-                      <p>{item.sizeId.size}</p>
-                    </div>
+                      <span
+                        className={`relative px-4 py-2.5 transition-all ease-in duration-75  dark:bg-gray-900 rounded-md group-hover-bg-opacity-0  ${
+                          item.id === sizeId
+                            ? "bg-pink-300 text-white"
+                            : "bg-white"
+                        }`}
+                      >
+                        {item.sizeId.size}
+                      </span>
+                    </button>
                   );
                 })}
               </div>
@@ -204,12 +221,13 @@ const ProductsDetail = () => {
           {userDetail?.id ? (
             <div className="product-shopping">
               <p className="last-price">30.000.000 ₫</p>
-              <p className="new-price">27.500.000 ₫</p>
+              <p className="new-price">
+                {productDetail?.price?.toLocaleString()} ₫
+              </p>
               <p>Tiết kiệm: 10%</p>
               <p>CÒN HÀNG</p>
               <div className="store-near">
-                <i className="fa-solid fa-store"></i>
-                <p>Cửa hàng gần bạn</p>
+                <p>Số lượng kho: {productDetail?.stock}</p>
               </div>
               <div className="quantity">
                 <p>Số lượng:</p>
@@ -224,10 +242,8 @@ const ProductsDetail = () => {
               <button className="addCart" onClick={addToCart}>
                 Thêm vào giỏ hàng
               </button>
-              <button className="buyNow">Mua ngay</button>
-              <button className="favorite hide-tablet">
-                <i className="fa-regular fa-heart"></i>
-                <p>Yêu thích</p>
+              <button className="buyNow" onClick={addToCart}>
+                Mua ngay
               </button>
             </div>
           ) : (

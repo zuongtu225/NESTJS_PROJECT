@@ -20,8 +20,6 @@ import { CurrentUser } from './decorator/currentUser.decorator';
 import { IResponse } from 'src/shared/interfaces/response.interface';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CloudinaryService } from 'src/shared/utils/cloudinary/cloudinary.service';
-import { User } from './entities/user.entity';
-import { ITitle } from '../product/interface/Product.interface';
 dotenv.config();
 const init = process.env.API_URL;
 

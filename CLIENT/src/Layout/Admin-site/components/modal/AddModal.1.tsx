@@ -25,6 +25,7 @@ import { createCategory } from "../../../../Api/categories";
 import AddCategoryForm from "./FormAdd/AddCategoryForm";
 import { createPayment } from "../../../../Api/payment";
 import AddPaymentForm from "./FormAdd/AddPaymentForm";
+import LoadingComponent from "../../../Customer-site/components/lazy-loading";
 
 export function AddModal(props: any): any {
   const dispatch = useDispatch<AppDispatch>();
@@ -35,6 +36,7 @@ export function AddModal(props: any): any {
   const [sizes, setSizes] = useState<any>();
   const [payment, setPayment] = useState<any>();
   const [open, setOpen] = useState(props.open);
+  const [openLoading, setOpenLoading] = useState<boolean>(false);
 
   useEffect(() => {
     setOpen(props.open);
@@ -61,6 +63,8 @@ export function AddModal(props: any): any {
   const handleAdd = async () => {
     switch (props.title) {
       case "PRODUCTS":
+        props.handleClose(false);
+        setOpenLoading(true);
         const resProduct: any = await createProduct(product);
         if (resProduct?.data?.success === true) {
           const productSize = {
@@ -76,8 +80,10 @@ export function AddModal(props: any): any {
           };
           for (let img of images) formData.append("images", img);
           formData.append("productId", resProduct.data?.data?.id);
-          await createImages(formData, config);
-          props.handleClose(false);
+          const resImage: any = await createImages(formData, config);
+          if (resImage?.data?.success === true) {
+            setOpenLoading(false);
+          }
           toast.success(resProduct.data.message);
           setTimeout(() => {
             dispatch(getApiProducts(null));
@@ -133,6 +139,8 @@ export function AddModal(props: any): any {
     // Form  chung
     // Submit chung
     <div className="formAdd">
+      {openLoading ? <LoadingComponent /> : null}
+
       <Dialog open={open} handler={ClickClose}>
         <DialogHeader> Form Thêm </DialogHeader>
         <DialogBody divider>

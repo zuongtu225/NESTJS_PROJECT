@@ -13,7 +13,7 @@ import {
 export class Address {
   @PrimaryGeneratedColumn()
   id: number;
-  @Column({ unique: true })
+  @Column()
   address: string;
   @Column()
   phoneNumber: number;

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import {
-  getApiBank,
   getApiProducts,
   getCartByUser,
   getDetailUser,
@@ -10,27 +9,33 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../../../store";
 import { useNavigate } from "react-router-dom";
 import { IoMdCash } from "react-icons/io";
-import { FiPhoneCall } from "react-icons/fi";
-import { BiUser } from "react-icons/bi";
 import { IProduct } from "../../../../Interface";
 import { createOrder } from "../../../../Api/order";
 import { ToastContainer, toast } from "react-toastify";
 import { deleteCart, updateProduct } from "../../../../Api";
 import { createOrderItem } from "../../../../Api/orderItem";
 import { createAddress } from "../../../../Api/address";
+import Paypal from "./paypayl";
+import { BiUser } from "react-icons/bi";
+import { FiPhoneCall } from "react-icons/fi";
 import { io } from "socket.io-client";
 const socket = io("http://localhost:9000");
+
 const Checkout = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-  const [payment, setPayment] = useState<boolean>(false);
+  const [paypal, setPaypal] = useState<boolean>(false);
+  const [name, setName] = useState<string>();
+  const [address, setAddress] = useState<string>();
+  const [phone, setPhone] = useState<string>();
   const dataProduct = useSelector(
     (state: any) => state?.productReducer?.products
   );
   const carts: any = useSelector((state: any) => state?.cartReducer?.carts);
-  const userDetail: any = useSelector(
-    (state: any) => state?.userReducer?.userDetail
+  const hasErrorQuantity = carts?.some(
+    (item: any) => item.quantity > item.productSizeId?.productId?.stock
   );
+
   const [total, setTotal] = useState(0);
   const calculateTotalPrice = () => {
     let totalPrice = 0;
@@ -44,10 +49,10 @@ const Checkout = () => {
               product.productId.price * product?.sizeId?.percent * quantity;
           } else if (product?.sizeId?.size === "Eau de Parfum 200ml") {
             totalPrice +=
-              product.productId.price * product?.sizeId?.percent * quantity;
+              product?.productId?.price * product?.sizeId?.percent * quantity;
           } else if (product?.sizeId?.size === "Eau de Parfum 300ml") {
             totalPrice +=
-              product.productId.price * product?.sizeId?.percent * quantity;
+              product?.productId?.price * product?.sizeId?.percent * quantity;
           }
         }
       }
@@ -60,73 +65,13 @@ const Checkout = () => {
   useEffect(() => {
     setTotal(calculateTotalPrice());
   }, []);
-  const [checkCvc, setCheckCvc] = useState<boolean>(false);
-  const [name, setName] = useState<string>();
-  const [address, setAddress] = useState<string>();
-  const [phone, setPhone] = useState<string>(userDetail?.phone);
-  const handleCvc = (e: any) => {
-    const cvcInput = Number(e.target.value);
-    if (cvcInput === userDetail.cardVisa.cvc) {
-      setCheckCvc(true);
-    } else {
-      setCheckCvc(false);
-    }
+  const infoAddress = {
+    fullName: name,
+    phoneNumber: phone,
+    address: address,
   };
-  const handlePay = () => {
-    if (payment === true) {
-      paymentVisa();
-    } else {
-      paymentCOD();
-    }
-  };
-  // visa
-  const paymentVisa = async () => {
-    if (checkCvc === true) {
-      let order = {
-        id: Math.random(),
-        codeOrder: Number("2" + (Math.random() * 10000000).toFixed(0)),
-        name: name,
-        // userId: userDetail.id,
-        address: address,
-        phone: phone,
-        email: userDetail.email,
-        cartOrders: userDetail.cart,
-        sum: userDetail.sum,
-        date: new Date(),
-        status: "Pending",
-        payment: "VISA",
-      };
-      // check wallet
-      const year = new Date().getFullYear();
-      if (
-        userDetail?.cardVisa.wallet >= userDetail?.sum &&
-        userDetail?.cardVisa.exp > year
-      ) {
-        // const res: any = await addApiOrders(order);
-        // nếu ko dùng await sẽ lỗi bất đồng bộ
-        // if (res.status === 201) {
-        //   updateInfoVisaUser(); // cập nhật thông tin wallet, các đơn hàng trong giỏ
-        //   toast.success("Đặt hàng thành công");
-        //   setTimeout(() => {
-        //     navigate("/");
-        //   }, 1500);
-        // }
-      } else {
-        toast.error("Số dư không đủ hoặc thẻ đã hết hạn");
-      }
-    } else {
-      toast.error("Sai mã CVC hoặc Thẻ Visa chưa đúng");
-    }
-  };
-  // cod
-  const paymentCOD = async () => {
-    const infoAddress = {
-      fullName: name,
-      phoneNumber: phone,
-      address: address,
-    };
-    const resAddress: any = await createAddress(infoAddress);
-    const addressId = resAddress?.data?.data.id;
+  // paypal
+  const paymentPaypal = async (addressId: number) => {
     const code = Number("2" + (Math.random() * 100000000).toFixed(0));
     const date = new Date();
     const deliveryDate = new Date(date.getTime() + 3 * 24 * 60 * 60 * 1000);
@@ -168,6 +113,65 @@ const Checkout = () => {
           navigate("/");
         }, 1500);
       } else {
+        return toast.error(orderItem.data.message);
+      }
+    } else {
+      return toast.error(resOrder.data.message);
+    }
+  };
+  // cod
+  const paymentCOD = async () => {
+    if (hasErrorQuantity) {
+      return toast.error("Sản phẩm không đủ số lượng trong kho");
+    }
+    const infoAddress = {
+      fullName: name,
+      phoneNumber: phone,
+      address: address,
+    };
+    const resAddress: any = await createAddress(infoAddress);
+    const addressId = resAddress?.data?.data.id;
+    const code = Number("2" + (Math.random() * 100000000).toFixed(0));
+    const date = new Date();
+    const deliveryDate = new Date(date.getTime() + 3 * 24 * 60 * 60 * 1000);
+    const expectedDelivery = deliveryDate
+      .toISOString() // change => định dạng ISO 8601.
+      .slice(0, 19)
+      .replace("T", " ");
+    const newOrder = {
+      codeOrder: code,
+      paymentId: 4,
+      orderDate: date.toISOString().slice(0, 19).replace("T", " "),
+      expectedDeliveryDate: expectedDelivery,
+      addressId: addressId,
+      total,
+      status: "Pending",
+    };
+    const resOrder: any = await createOrder(newOrder);
+    if (resOrder?.data?.success === true) {
+      const newOrderItems = carts.map((item: any) => ({
+        codeOrder: resOrder.data.data.codeOrder,
+        quantity: item.quantity,
+        productSizeId: item.productSizeId,
+        userId: item.userId,
+      }));
+      const productIds = newOrderItems.map((item: any) => ({
+        id: item.productSizeId.productId.id,
+      }));
+      const quantities = newOrderItems.map((item: any) => ({
+        quantity: item.quantity,
+      }));
+      const orderItem: any = await createOrderItem(newOrderItems);
+      if (orderItem?.data?.success === true) {
+        socket.emit("renderStockProduct", "");
+        await updateStock(productIds, quantities);
+        toast.success(resOrder.data.message);
+        await deleteCart();
+        await dispatch(getCartByUser());
+        setTimeout(() => {
+          navigate("/");
+        }, 1500);
+      } else {
         toast.error(orderItem.data.message);
       }
     } else {
@@ -181,55 +185,30 @@ const Checkout = () => {
       const product = dataProduct.find(
         (item: IProduct) => item.id === productId.id
       );
-
       if (!product) {
         return toast.error("Id sản phẩm không đúng");
-      }
-
-      if (product?.stock < quantity) {
-        return toast.error("Sản phẩm không đủ số lượng.");
       }
       const updateStock = { id: product.id, stock: product.stock - quantity };
 
       await updateProduct(updateStock);
     }
   };
-  const updateInfoVisaUser = async () => {
-    const updateUserInfo = {
-      ...userDetail,
-      sum: 0,
-      cart: [],
-      cardVisa: {
-        ...userDetail.cardVisa,
-        wallet: userDetail.cardVisa.wallet - userDetail.sum,
-      },
-    };
-    // dispatch(getDetailUser(userDetail.id));
-    // for (const bank of banks) {
-    //   if (bank.code === userDetail.cardVisa.code) {
-    //     const newWallet = userDetail.cardVisa.wallet - userDetail.sum;
-    //     const updateVisa = {
-    //       ...userDetail.cardVisa,
-    //       wallet: newWallet,
-    //     };
-    //     const responBank = await updateBanks(updateVisa); // cập nhật lại banks api
-    //     dispatch(getApiBank());
-    //   }
-    // }
-  };
-
   useEffect(() => {
-    dispatch(getApiBank());
     dispatch(getOrderApi());
     dispatch(getCartByUser());
     dispatch(getDetailUser());
     dispatch(getApiProducts(null));
   }, []);
+
+  useEffect(() => {
+    socket.on("renderStockProduct", (newMessage) => {
+      dispatch(getCartByUser());
+    });
+  }, []);
   return (
     <div>
       <>
         <ToastContainer />
-
         <div className="grid sm:px-10 lg:grid-cols-2 lg:px-20 xl:px-32">
           <div className="px-4 pt-8">
             <p className="text-xl font-medium">Tất cả đơn hàng</p>
@@ -257,11 +236,18 @@ const Checkout = () => {
                         <span className="text-black-500">Số lượng:</span>
                         <span className="text-black">{item.quantity}</span>
                       </div>
-                      <p className="text-lg text-red-600  ">
-                        Giá:
-                        {item.productSizeId?.productId?.price?.toLocaleString()}
-                        đ
-                      </p>
+
+                      {item.quantity > item.productSizeId?.productId?.stock ? (
+                        <p className="pt-2 text-red-600">
+                          Số lượng trong kho không đủ
+                        </p>
+                      ) : (
+                        <p className="text-lg text-red-600  ">
+                          Giá:
+                          {item.productSizeId?.productId?.price?.toLocaleString()}
+                          đ
+                        </p>
+                      )}
                     </div>
                   </div>
                 );
@@ -275,14 +261,13 @@ const Checkout = () => {
             </p>
             <div className="">
               <p className="mt-8 text-lg font-medium">Phương thức thanh toán</p>
-              {/* visa cod start */}
               <form className=" grid gap-6">
                 <div className="relative mt-2">
                   <input
                     className=" peer hidden"
                     id="radio_1"
                     value="home"
-                    onChange={() => setPayment(false)}
+                    onChange={() => setPaypal(false)}
                     type="radio"
                     name="radio"
                     defaultChecked
@@ -315,7 +300,7 @@ const Checkout = () => {
                     id="radio_2"
                     type="radio"
                     name="radio"
-                    onChange={() => setPayment(true)}
+                    onChange={() => setPaypal(true)}
                   />
                   <span className="peer-checked:border-gray-700 absolute right-4 top-1/2 box-content block h-3 w-3 -translate-y-1/2 rounded-full border-8 border-gray-300 bg-white" />
                   <label
@@ -329,102 +314,68 @@ const Checkout = () => {
                     />
                     <div className="ml-10 flex gap-3 items-center">
                       <span className=" font-semibold">
-                        Thanh toán qua thẻ VISA
+                        Thanh toán qua Paypal
                       </span>
 
                       <img
                         className="w-[10%]"
-                        src="https://static.vecteezy.com/system/resources/previews/022/100/276/original/visa-logo-transparent-free-png.png"
+                        src="https://w7.pngwing.com/pngs/803/833/png-transparent-logo-paypal-computer-icons-paypal-blue-angle-logo.png"
                         alt=""
                       />
                     </div>
                   </label>
                 </div>
               </form>
-              {/* visa cod end */}
-              <div className="relative mt-2">
-                <input
-                  type="text"
-                  id="card-holder"
-                  name="card-holder"
-                  className="w-full  border border-gray-200 px-4 py-3 pl-11 text-sm  shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
-                  placeholder="Tên người nhận"
-                  onChange={(e: any) => setName(e.target.value)}
-                />
-                <div className="pointer-events-none absolute inset-y-0 left-0 inline-flex items-center px-3">
-                  <BiUser />
-                </div>
-              </div>
               {/* phone */}
-              <div className="relative">
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  className="mt-5 w-full mb-2 border border-gray-200 px-4 py-3 pl-20 pt-5 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
-                  placeholder="Số điện thoại người nhận  "
-                  onChange={(e: any) => setPhone(e.target.value)}
-                />
-                <div className="pointer-events-none absolute inset-y-0 mt-5 left-0 inline-flex items-center px-3">
-                  <FiPhoneCall />
-                  <p className="pl-2">+84</p>
+              <div>
+                <div className="relative mt-2">
+                  <input
+                    type="text"
+                    id="card-holder"
+                    name="card-holder"
+                    className="w-full  border border-gray-200 px-4 py-3 pl-11 text-sm  shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
+                    placeholder="Tên người nhận"
+                    onChange={(e: any) => setName(e.target.value)}
+                  />
+                  <div className="pointer-events-none absolute inset-y-0 left-0 inline-flex items-center px-3">
+                    <BiUser />
+                  </div>
                 </div>
-              </div>
-              {payment === true && (
-                <div className="flex">
-                  <div className="relative w-7/12 flex-shrink-0 my-2">
+                {/* phone */}
+                <div className="relative">
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    className="mt-5 w-full mb-2 border border-gray-200  py-3 pl-20 pt-5 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
+                    placeholder="Số điện thoại người nhận  "
+                    onChange={(e: any) => setPhone(e.target.value)}
+                  />
+                  <div className="pointer-events-none absolute inset-y-0 mt-5 left-0 inline-flex items-center px-3">
+                    <FiPhoneCall />
+                    <p className="pl-2">+84</p>
+                  </div>
+                </div>
+                <div className="flex flex-col sm:flex-row">
+                  <div className="relative flex-shrink-0 w-full">
                     <input
                       type="text"
-                      id="card-no"
-                      name="card-no"
-                      value={userDetail.cardVisa.code}
-                      className="w-full  border border-gray-200 px-2 py-3 pl-[45px] text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
-                      placeholder="xxxx-xxxx-xxxx-xxxx"
+                      id="billing-address"
+                      name="billing-address"
+                      className="w-full pl-[41px]  border border-gray-200 px-4 py-3   text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
+                      placeholder="Địa chỉ nhận hàng"
+                      onChange={(e: any) => setAddress(e.target.value)}
                     />
                     <div className="pointer-events-none absolute inset-y-0 left-0 inline-flex items-center px-3">
                       <img
-                        className="w-6 h-6"
-                        src="https://static.vecteezy.com/system/resources/previews/022/100/276/original/visa-logo-transparent-free-png.png"
+                        className="h-5 w-5 object-contain "
+                        src="https://seeklogo.com/images/V/viet-nam-logo-3D78D597F9-seeklogo.com.png"
                         alt=""
                       />
                     </div>
                   </div>
-                  <input
-                    type="text"
-                    name="credit-expiry"
-                    className="w-full my-2  border border-gray-200 px-2 py-3 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
-                    placeholder="MM/YY"
-                    value={userDetail?.cardVisa?.exp}
-                  />
-                  <input
-                    type="password"
-                    name="credit-cvc"
-                    className="w-1/6 my-2 flex-shrink-0  border border-gray-200 px-2 py-3 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
-                    placeholder="CVC"
-                    onChange={(e: any) => handleCvc(e)}
-                  />
-                </div>
-              )}
-              <div className="flex flex-col sm:flex-row">
-                <div className="relative flex-shrink-0 w-full">
-                  <input
-                    type="text"
-                    id="billing-address"
-                    name="billing-address"
-                    className="w-full pl-[41px]  border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
-                    placeholder="Địa chỉ nhận hàng"
-                    onChange={(e: any) => setAddress(e.target.value)}
-                  />
-                  <div className="pointer-events-none absolute inset-y-0 left-0 inline-flex items-center px-3">
-                    <img
-                      className="h-5 w-5 object-contain "
-                      src="https://seeklogo.com/images/V/viet-nam-logo-3D78D597F9-seeklogo.com.png"
-                      alt=""
-                    />
-                  </div>
                 </div>
               </div>
-              {/* Total */}
               <div className="mt-6 border-t border-b py-2">
                 <div className="flex items-center justify-between">
                   <p className="text-sm  text-gray-900 font-semibold">
@@ -441,19 +392,28 @@ const Checkout = () => {
                   <p className=" text-gray-900">20.000 ₫</p>
                 </div>
               </div>
-              <div className="mt-6 flex items-center justify-between">
+              <div className="mt-6 mb-5 flex items-center justify-between">
                 <p className="text-sm font-medium text-gray-900">Tổng tiền</p>
                 <p className="text-2xl font-semibold  text-red-500">
-                  {(total - 20000).toLocaleString()} ₫
+                  {total.toLocaleString()} ₫
                 </p>
               </div>
             </div>
-            <button
-              onClick={handlePay}
-              className="mt-4 mb-8 w-full rounded-md bg-gray-900 px-6 py-3 font-medium text-white"
-            >
-              ĐẶT HÀNG
-            </button>
+            {paypal === false ? (
+              <button
+                onClick={paymentCOD}
+                className="mt-4 mb-8 w-full rounded-md bg-gray-900 px-6 py-3 font-medium text-white"
+              >
+                ĐẶT HÀNG
+              </button>
+            ) : (
+              <Paypal
+                hasErrorQuantity={hasErrorQuantity}
+                infoAddress={infoAddress}
+                amount={Math.round(total / 24325)}
+                paymentPaypal={paymentPaypal}
+              />
+            )}
           </div>
         </div>
       </>

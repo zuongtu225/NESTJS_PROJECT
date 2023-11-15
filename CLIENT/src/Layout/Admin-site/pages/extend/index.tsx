@@ -18,11 +18,8 @@ const AdminExtend = () => {
   }, []);
   useEffect(() => {
     socket.on("message", (newMessage) => {
-      const order = async () => {
-        dispatch(getOrderApi());
-        toast.success("Co don hang moi");
-      };
-      order();
+      dispatch(getOrderApi());
+      toast.success("Bạn có đơn hàng mới ");
     });
   }, []);
   useEffect(() => {

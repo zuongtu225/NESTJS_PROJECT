@@ -118,13 +118,15 @@ const HistoryOrders = () => {
                         >
                           Hủy đơn
                         </button>
-                      ) : (
+                      ) : item.status === "Completed" ? (
                         <button
                           onClick={() => handleDetail(item.id)}
                           className="w-30 bg-green-500 text-red-100 px-4 py-2 font-semibol m-2"
                         >
                           Chi tiết
                         </button>
+                      ) : (
+                        ""
                       )}
                     </td>
                   </tr>

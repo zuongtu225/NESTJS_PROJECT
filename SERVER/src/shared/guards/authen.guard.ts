@@ -29,7 +29,6 @@ export class AuthenGuard implements CanActivate {
       if (!user) {
         throw new BadRequestException('Lỗi token');
       }
-
       request['user'] = user;
       return true;
     } catch (error) {

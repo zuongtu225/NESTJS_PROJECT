@@ -8,6 +8,7 @@ import { ToastContainer, toast } from "react-toastify";
 import ButtonEditProduct from "../../components/Button/ButtonEditProduct";
 import Pagination from "../../components/pagination";
 import { IProduct } from "../../../../Interface";
+import Export from "../../components/export";
 
 const ProductManager = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -16,6 +17,7 @@ const ProductManager = () => {
   const handlePage = (pagination: any) => {
     setData(pagination);
   };
+
   const handleStatus = async (status: any, id: number) => {
     const newStatus = +status === 1 ? true : false;
     const response: any = await updateStatusProduct(newStatus, id);
@@ -35,6 +37,7 @@ const ProductManager = () => {
     <div>
       <AdminHeader title="PRODUCTS" slug="PRODUCTS" />
       <ToastContainer />
+      <Export data={product} slug={"PRODUCTS"} />
       <div className="content">
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
           <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">

@@ -28,6 +28,7 @@ export class BrandController {
   constructor(private readonly brandService: BrandService) {}
   @Post()
   @UseGuards(AuthorGuard)
+  @UseGuards(AuthenGuard)
   async createBrand(@Body() body: IBrand): Promise<IResponse> {
     return await this.brandService.createBrandService(body);
   }

@@ -2,18 +2,11 @@ import React, { useEffect, useState } from "react";
 import {
   Button,
   Dialog,
-  DialogHeader,
   DialogBody,
   DialogFooter,
 } from "@material-tailwind/react";
 import EditProductForm from "./FormEdit/EditProductForm";
-import {
-  IBrand,
-  ICategory,
-  IPayment,
-  IProduct,
-  IProductSize,
-} from "../../../../Interface";
+import { IBrand, ICategory, IPayment, IProduct } from "../../../../Interface";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../../store";
 import {
@@ -30,6 +23,7 @@ import EditCategoryForm from "./FormEdit/EditCategoryForm";
 import { updateCategory } from "../../../../Api/categories";
 import EditPaymentForm from "./FormEdit/EditPaymentForm";
 import { updatePayment } from "../../../../Api/payment";
+import LoadingComponent from "../../../Customer-site/components/lazy-loading";
 export function EditModal(props: any) {
   const dispatch = useDispatch<AppDispatch>();
   const [open, setOpen] = useState(props.open);
@@ -60,7 +54,7 @@ export function EditModal(props: any) {
           props.handleClose(false);
           setTimeout(() => {
             dispatch(getApiProducts(null));
-          }, 2000);
+          }, 1000);
         } else {
           props.handleClose(false);
           toast.error("Tên sản phẩm đã được tạo vui lòng nhập tên khác");
@@ -118,7 +112,6 @@ export function EditModal(props: any) {
   return (
     <div>
       <Dialog open={open} handler={ClickClose}>
-        {/* <DialogHeader> Form Sửa </DialogHeader> */}
         <DialogBody divider>
           {props.title === "PRODUCTS" && (
             <div>

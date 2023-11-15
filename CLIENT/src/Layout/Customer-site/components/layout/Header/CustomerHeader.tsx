@@ -3,7 +3,7 @@ import { ItemNavbar } from "../../../utils/nav";
 import { NavLink, useNavigate } from "react-router-dom";
 import { FcCallback } from "react-icons/fc";
 import { AiOutlineInstagram, AiOutlineYoutube } from "react-icons/ai";
-import { FiFacebook, FiSearch } from "react-icons/fi";
+import { FiFacebook } from "react-icons/fi";
 import { PiUserSquareLight } from "react-icons/pi";
 import { RiShoppingCart2Line, RiLogoutBoxRLine } from "react-icons/ri";
 import { LuStore } from "react-icons/lu";
@@ -17,6 +17,9 @@ import {
 } from "../../../../../store/action";
 import { IProduct } from "../../../../../Interface";
 import { Avatar, Dropdown } from "flowbite-react";
+import { io } from "socket.io-client";
+const socket = io("http://localhost:9000");
+
 const CustomerHeader = () => {
   const dispatch = useDispatch<AppDispatch>();
   const nagivate = useNavigate();
@@ -25,7 +28,6 @@ const CustomerHeader = () => {
     (state: any) => state?.userReducer?.userDetail
   );
   const carts: any = useSelector((state: any) => state?.cartReducer?.carts);
-
   const [isHidden, setIsHidden] = useState<boolean>(false);
   const [dataSearch, setDataSearch] = useState<any>();
   const dataProduct = useSelector(
@@ -75,6 +77,11 @@ const CustomerHeader = () => {
     navigate(`/detail/${id}`);
     setIsHidden(false);
   };
+  socket.on("blockUser", async (newMessage) => {
+    localStorage.removeItem("auth");
+    await dispatch(getDetailUser());
+    nagivate("/auth/login");
+  });
   return (
     <header id="moveTop">
       <ToastContainer />
@@ -86,7 +93,9 @@ const CustomerHeader = () => {
           <li>Hàng hiệu giảm 50%</li>
         </ul>
         <ul>
-          <li>Liên hệ chúng tôi</li>
+          <li className="cursor-pointer" onClick={() => navigate("/contact")}>
+            Liên hệ chúng tôi
+          </li>
           <li>
             <div className="hotline">
               <FcCallback className="w-4 h-4" />
@@ -189,7 +198,6 @@ const CustomerHeader = () => {
               )}
             </div>
           </div>
-
           <div className="cart mr-5">
             <p className="hide-mobile hide-tablet">|</p>
             <div className="nationwide-store hide-mobile  hide-tablet"></div>
@@ -215,7 +223,13 @@ const CustomerHeader = () => {
               </Dropdown.Item>
               <Dropdown.Item>Cài đặt</Dropdown.Item>
               <Dropdown.Divider />
-              <Dropdown.Item onClick={logout}>Đăng xuất</Dropdown.Item>
+              {auth !== "" ? (
+                <Dropdown.Item onClick={logout}>Đăng xuất</Dropdown.Item>
+              ) : (
+                <Dropdown.Item onClick={() => navigate("/auth/login")}>
+                  Đăng nhập
+                </Dropdown.Item>
+              )}
             </Dropdown>
           </div>
         </div>

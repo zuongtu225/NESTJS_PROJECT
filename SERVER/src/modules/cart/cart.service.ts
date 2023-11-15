@@ -42,7 +42,7 @@ export class CartService {
       return {
         data: null,
         success: true,
-        message: 'Cập nhật thành công',
+        message: 'Cập nhật giỏ hàng thành công',
       };
     }
     return {

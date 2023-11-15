@@ -20,6 +20,7 @@ export class AuthenRepository {
   }
 
   async login(body: LoginDto): Promise<IResponseAuth> {
+    console.log(body, '<<');
     const user = await this.authenRepository.findOne({
       where: { email: body.email },
       relations: ['role'],
@@ -37,7 +38,6 @@ export class AuthenRepository {
       firstName: user.firstName,
       lastName: user.lastName,
       email: user.email,
-      role: user.role.role,
     };
     const token = checkPassword
       ? await this.jwtService.signAsync(payload)

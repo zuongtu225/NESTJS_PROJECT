@@ -7,25 +7,27 @@ import { updateStatusUser } from "../../../../Api";
 import { ToastContainer, toast } from "react-toastify";
 import Pagination from "../../components/pagination";
 import { IUser } from "../../../../Interface";
-
+import * as io from "socket.io-client";
+import Export from "../../components/export";
+const socket = io.connect("http://localhost:9000");
 const UsersManager = () => {
   const dispatch = useDispatch<AppDispatch>();
   const users = useSelector((state: any) => state?.userReducer?.users);
   const [data, setData] = useState<IUser[]>();
-
   const handlePage = (pagination: any) => {
     setData(pagination);
   };
-
   useEffect(() => {
     dispatch(getApiUsers(null));
   }, []);
   const handleStatus = async (status: any, id: number) => {
     const newStatus = +status === 1 ? true : false;
+    if (status === 2) {
+      socket.emit("blockUser", "");
+    }
     const response = await updateStatusUser(newStatus, id);
-
-    if (response.data.success === true) {
-      toast.success(response.data.message);
+    if (response?.data?.success === true) {
+      toast.success(response?.data?.message);
       setTimeout(async () => {
         await dispatch(getApiUsers(null));
         await dispatch(getDetailUser());
@@ -38,6 +40,7 @@ const UsersManager = () => {
     <div>
       <AdminHeader title={"USERS"} slug={"USERS"} />
       <ToastContainer />
+      <Export data={users} slug={"USERS"} />
       <div className="content users">
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
           <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
@@ -57,9 +60,6 @@ const UsersManager = () => {
                 </th>
                 <th scope="col" className="px-6 py-3">
                   Trạng thái
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  Hành động
                 </th>
               </tr>
             </thead>
@@ -97,16 +97,6 @@ const UsersManager = () => {
                             {item.status ? "Block" : "Active"}
                           </option>
                         </select>
-                      )}
-                    </td>
-
-                    <td className="px-1 py-2">
-                      {item.role.id === 2 && (
-                        <div>
-                          <button className="w-30 bg-green-500 text-red-100 px-5 py-2 font-semibol m-2">
-                            Xem
-                          </button>
-                        </div>
                       )}
                     </td>
                   </tr>
